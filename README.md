@@ -54,7 +54,7 @@ How long before the assertion is no longer valid
 Example
 -------
 
-java -jar saml-generator-1.0.jar -domain 7719 -issuer 'http://some.compnay.com' -privateKey saml.pkcs8 -publicKey saml.crt -roles 'role1' -samlAssertionExpirationDays 5 -subject samlUser1
+java -jar saml-generator-1.0.jar -domain 7719 -issuer 'http://some.company.com' -privateKey saml.pkcs8 -publicKey saml.crt -roles 'role1' -samlAssertionExpirationDays 5 -subject samlUser1
 
 Output:
 ```
@@ -82,7 +82,7 @@ Output:
     <saml2p:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
   </saml2p:Status>
   <saml2:Assertion xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion" ID="4ee2be6a-8075-40a2-ba89-cf0991880af2" IssueInstant="2014-06-17T20:47:33.379Z" Version="2.0">
-    <saml2:Issuer>http://some.compnay.com</saml2:Issuer>
+    <saml2:Issuer>http://some.company.com</saml2:Issuer>
     <saml2:Subject>
       <saml2:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">samlUser</saml2:NameID>
       <saml2:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
