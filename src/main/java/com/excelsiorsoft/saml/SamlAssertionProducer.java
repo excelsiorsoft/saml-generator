@@ -173,10 +173,11 @@ public class SamlAssertionProducer {
 			currentDate = currentDate.plusDays(samlAssertionDays);
 
 		// create name element
-		NameIDBuilder nameIdBuilder = new NameIDBuilder();
-		NameID nameId = nameIdBuilder.buildObject();
+		//NameIDBuilder nameIdBuilder = new NameIDBuilder();
+		NameID nameId = new NameIDBuilder().buildObject();
 		nameId.setValue(subjectId);
-		nameId.setFormat("urn:oasis:names:tc:SAML:2.0:nameid-format:persistent");
+		//nameId.setFormat("urn:oasis:names:tc:SAML:2.0:nameid-format:persistent");
+		nameId.setFormat("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
 
 		SubjectConfirmationDataBuilder dataBuilder = new SubjectConfirmationDataBuilder();
 		SubjectConfirmationData subjectConfirmationData = dataBuilder
@@ -186,7 +187,8 @@ public class SamlAssertionProducer {
 		SubjectConfirmationBuilder subjectConfirmationBuilder = new SubjectConfirmationBuilder();
 		SubjectConfirmation subjectConfirmation = subjectConfirmationBuilder
 				.buildObject();
-		subjectConfirmation.setMethod("urn:oasis:names:tc:SAML:2.0:cm:bearer");
+		//subjectConfirmation.setMethod("urn:oasis:names:tc:SAML:2.0:cm:bearer");
+		subjectConfirmation.setMethod("urn:oasis:names:tc:SAML:2.0:cm:sender-vouches");
 		subjectConfirmation.setSubjectConfirmationData(subjectConfirmationData);
 
 		// create subject element
