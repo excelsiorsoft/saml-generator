@@ -70,8 +70,8 @@ public class SamlAssertionProducer {
 			AttributeStatement attributeStatement = null;
 
 			if (issuer != null) {
-				responseIssuer = createIssuer(issuer);
-				// assertionIssuer = createIssuer(issuer);
+				responseIssuer = createIssuer(issuer, false);
+				assertionIssuer = createIssuer(issuer, true);
 			}
 
 			if (subjectId != null) {
@@ -157,11 +157,12 @@ public class SamlAssertionProducer {
 		return assertion;
 	}
 
-	private Issuer createIssuer(final String issuerName) {
+	private Issuer createIssuer(final String issuerName, final boolean needFormat) {
 		// create Issuer object
 		IssuerBuilder issuerBuilder = new IssuerBuilder();
 		Issuer issuer = issuerBuilder.buildObject();
 		issuer.setValue(issuerName);
+		if (needFormat) issuer.setFormat("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
 		return issuer;
 	}
 
