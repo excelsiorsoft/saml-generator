@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.xml.namespace.QName;
+
 import org.joda.time.DateTime;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.common.SAMLVersion;
@@ -16,6 +18,7 @@ import org.opensaml.saml2.core.AttributeValue;
 import org.opensaml.saml2.core.AuthnContext;
 import org.opensaml.saml2.core.AuthnContextClassRef;
 import org.opensaml.saml2.core.AuthnStatement;
+import org.opensaml.saml2.core.Conditions;
 import org.opensaml.saml2.core.Issuer;
 import org.opensaml.saml2.core.NameID;
 import org.opensaml.saml2.core.Response;
@@ -39,6 +42,8 @@ import org.opensaml.saml2.core.impl.StatusCodeBuilder;
 import org.opensaml.saml2.core.impl.SubjectBuilder;
 import org.opensaml.saml2.core.impl.SubjectConfirmationBuilder;
 import org.opensaml.saml2.core.impl.SubjectConfirmationDataBuilder;
+import org.opensaml.xml.Configuration;
+import org.opensaml.xml.XMLObjectBuilder;
 import org.opensaml.xml.schema.XSString;
 import org.opensaml.xml.schema.impl.XSStringBuilder;
 import org.opensaml.xml.signature.Signature;
@@ -138,6 +143,28 @@ public class SamlAssertionProducer {
 		return response;
 	}
 
+    @SuppressWarnings ("unchecked")
+    public <T> T create (Class<T> cls, QName qname)
+    {
+        return (T) ((XMLObjectBuilder) 
+            Configuration.getBuilderFactory ().getBuilder (qname))
+                .buildObject (qname);
+    }
+    
+    private Conditions createConditions(){
+    	
+    	DateTime now = new DateTime ();
+        //assertion.setIssueInstant (now);
+	
+    Conditions conditions = create 
+            (Conditions.class, Conditions.DEFAULT_ELEMENT_NAME);
+        conditions.setNotBefore (now.minusSeconds (10));
+        conditions.setNotOnOrAfter (now.plusMinutes (30));
+        //assertion.setConditions (conditions);
+        
+        return conditions;
+    }
+	
 	private Assertion createAssertion(final DateTime issueDate,
 			Subject subject, Issuer issuer, AuthnStatement authnStatement,
 			AttributeStatement attributeStatement) {
@@ -147,6 +174,15 @@ public class SamlAssertionProducer {
 		assertion.setIssueInstant(issueDate);
 		assertion.setSubject(subject);
 		assertion.setIssuer(issuer);
+		
+		 /*DateTime now = new DateTime ();
+	        assertion.setIssueInstant (now);
+		
+        Conditions conditions = create 
+                (Conditions.class, Conditions.DEFAULT_ELEMENT_NAME);
+            conditions.setNotBefore (now.minusSeconds (10));
+            conditions.setNotOnOrAfter (now.plusMinutes (30));*/
+            assertion.setConditions (createConditions());
 
 		if (authnStatement != null)
 			assertion.getAuthnStatements().add(authnStatement);
