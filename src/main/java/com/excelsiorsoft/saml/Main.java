@@ -28,7 +28,7 @@ public class Main {
 	public static final String ISSUER = "issuer";
 	public static final String SUBJECT = "subject";
 	public static final String EMAIL = "email";
-	
+
 	public static final String TRANSACTION_ID = "TransactionID";
 	public static final String STATE_EXCHANGE_CODE = "StateExchangeCode";
 	public static final String PARTNER_ASSIGNED_CONSUMER_ID = "PartnerAssignedConsumerId";
@@ -40,22 +40,25 @@ public class Main {
 	public static final String KEEP_ALIVE_URL = "KeepAliveUrl";
 	public static final String NPN = "NPN";
 	public static final String PLAN_RESULTS_FILTER = "PlanResultsFilter";
-	public static final String FIRST_NAME ="FirstName";
-	public static final String MIDDLE_NAME ="MiddleName";
-	public static final String LAST_NAME ="LastName";
-	public static final String SUFFIX_NAME ="SuffixName";
-	public static final String STREET_NAME_1 ="StreetName1";
-	public static final String STREET_NAME_2 ="StreetName2";
-	public static final String CITY_NAME ="CityName";
-	public static final String STATE ="State";
-	public static final String ZIP_CODE ="ZipCode";
-	public static final String SSN ="SSN";
-	public static final String DATE_OF_BIRTH ="DateOfBirth";
-	public static final String PHONE_NUMBER ="PhoneNumber";
-	
-	public static final String[] govtAttributes = {DOMAIN, ROLES, EMAIL };
-	
-	
+	public static final String FIRST_NAME = "FirstName";
+	public static final String MIDDLE_NAME = "MiddleName";
+	public static final String LAST_NAME = "LastName";
+	public static final String SUFFIX_NAME = "SuffixName";
+	public static final String STREET_NAME_1 = "StreetName1";
+	public static final String STREET_NAME_2 = "StreetName2";
+	public static final String CITY_NAME = "CityName";
+	public static final String STATE = "State";
+	public static final String ZIP_CODE = "ZipCode";
+	public static final String SSN = "SSN";
+	public static final String DATE_OF_BIRTH = "DateOfBirth";
+	public static final String PHONE_NUMBER = "PhoneNumber";
+
+	public static final String[] govtAttributes = { TRANSACTION_ID,
+			STATE_EXCHANGE_CODE, PARTNER_ASSIGNED_CONSUMER_ID,
+			FFE_ASSIGNED_CONSUMER_ID, USER_TYPE, FFE_USER_ID, TRANSFER_TYPE,
+			RETURN_URL, KEEP_ALIVE_URL, NPN, PLAN_RESULTS_FILTER, FIRST_NAME,
+			MIDDLE_NAME, LAST_NAME, SUFFIX_NAME, STREET_NAME_1, STREET_NAME_2,
+			CITY_NAME, STATE, ZIP_CODE, SSN, DATE_OF_BIRTH, EMAIL, PHONE_NUMBER };
 
 	public static void main(String[] args) {
 		try {
@@ -72,15 +75,19 @@ public class Main {
 			options.addOption(EMAIL, true, "Email associated with the subject");
 			options.addOption(DOMAIN, true, "Domain attribute");
 			options.addOption(ROLES, true, "Comma separated list of roles");
-			options.addOption(PUBLIC_KEY, true, "Location of public key to decrypt assertion");
-			options.addOption(PRIVATE_KEY, true, "Location or private key use to sign assertion");
+			options.addOption(PUBLIC_KEY, true,
+					"Location of public key to decrypt assertion");
+			options.addOption(PRIVATE_KEY, true,
+					"Location or private key use to sign assertion");
 			options.addOption(SAML_ASSERTION_EXPIRATION_DAYS, true,
 					"How long before assertion is no longer valid. Can be negative.");
-			
-			options.addOption(TRANSACTION_ID, true,	"Transaction ID.");
+
+			options.addOption(TRANSACTION_ID, true, "Transaction ID.");
 			options.addOption(STATE_EXCHANGE_CODE, true, "State Exchange Code.");
-			options.addOption(PARTNER_ASSIGNED_CONSUMER_ID, true, "Partner Assigned Consumer ID");
-			options.addOption(FFE_ASSIGNED_CONSUMER_ID, true, "FFE Assigned Consumer ID");
+			options.addOption(PARTNER_ASSIGNED_CONSUMER_ID, true,
+					"Partner Assigned Consumer ID");
+			options.addOption(FFE_ASSIGNED_CONSUMER_ID, true,
+					"FFE Assigned Consumer ID");
 			options.addOption(USER_TYPE, true, "User Type");
 			options.addOption(FFE_USER_ID, true, "FFE User ID");
 			options.addOption(TRANSFER_TYPE, true, "Transfer Type");
@@ -125,8 +132,8 @@ public class Main {
 			producer.setPublicKeyLocation(publicKey);
 
 			Response responseInitial = producer.createSAMLResponse(subject,
-					new DateTime(), /*"password",*/ buildAttributes(cmd), issuer,
-					samlAssertionExpirationDays);
+					new DateTime(), /* "password", */buildAttributes(cmd),
+					issuer, samlAssertionExpirationDays);
 
 			ResponseMarshaller marshaller = new ResponseMarshaller();
 			Element element = marshaller.marshall(responseInitial);
@@ -143,30 +150,27 @@ public class Main {
 	}
 
 	private static Map<String, List<String>> buildAttributes(CommandLine cmd) {
-		
-		
 
 		Map<String, List<String>> attributes = new HashMap<String, List<String>>();
-		
-		for(Iterator<?> it = new ArrayIterator(govtAttributes);it.hasNext();){
+
+		for (Iterator<?> it = new ArrayIterator(govtAttributes); it.hasNext();) {
 			@SuppressWarnings("unused")
-			String name = (String)it.next();
+			String name = (String) it.next();
 			String value = cmd.getOptionValue(name);
 			if (value != null)
 				attributes.put(DOMAIN, Arrays.asList(value));
 		}
 
-		/*String domain = cmd.getOptionValue(DOMAIN);
-		if (domain != null)
-			attributes.put(DOMAIN, Arrays.asList(domain));
-
-		String roles = cmd.getOptionValue(ROLES);
-		if (roles != null)
-			attributes.put(ROLES, Arrays.asList(roles.split(",")));
-
-		String email = cmd.getOptionValue(EMAIL);
-		if (email != null)
-			attributes.put(EMAIL, Arrays.asList(email));*/
+		/*
+		 * String domain = cmd.getOptionValue(DOMAIN); if (domain != null)
+		 * attributes.put(DOMAIN, Arrays.asList(domain));
+		 * 
+		 * String roles = cmd.getOptionValue(ROLES); if (roles != null)
+		 * attributes.put(ROLES, Arrays.asList(roles.split(",")));
+		 * 
+		 * String email = cmd.getOptionValue(EMAIL); if (email != null)
+		 * attributes.put(EMAIL, Arrays.asList(email));
+		 */
 
 		return attributes;
 	}
