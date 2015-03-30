@@ -148,14 +148,7 @@ public class SamlAssertionProducer {
 		return response;
 	}
 
-/*    @SuppressWarnings ("unchecked")
-    public <T> T create (Class<T> cls, QName qname)
-    {
-        return (T) ((XMLObjectBuilder) 
-            Configuration.getBuilderFactory ().getBuilder (qname))
-                .buildObject (qname);
-    }*/
-    
+
     private Conditions createConditions(){
     	
     	DateTime now = new DateTime ();
@@ -183,11 +176,11 @@ public class SamlAssertionProducer {
 		assertion.setIssuer(issuer);
         assertion.setConditions (createConditions());
 
+        if (attributeStatement != null)
+			assertion.getAttributeStatements().add(attributeStatement);
+        
 		if (authnStatement != null)
 			assertion.getAuthnStatements().add(authnStatement);
-
-		if (attributeStatement != null)
-			assertion.getAttributeStatements().add(attributeStatement);
 
 		return assertion;
 	}
