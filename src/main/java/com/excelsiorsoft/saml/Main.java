@@ -60,6 +60,17 @@ public class Main {
 			MIDDLE_NAME, LAST_NAME, SUFFIX_NAME, STREET_NAME_1, STREET_NAME_2,
 			CITY_NAME, STATE, ZIP_CODE, SSN, DATE_OF_BIRTH, EMAIL, PHONE_NUMBER };
 
+	@SuppressWarnings("serial")
+	public static Map<String, String> govtAttributesWithDefaults = new HashMap<String, String>() {
+
+		{
+			put(TRANSACTION_ID, "2f3f2d3d-00cf-47ed-bb05-fd158e4b4180");
+
+		}
+
+		;
+	};
+
 	public static void main(String[] args) {
 		try {
 
@@ -153,12 +164,23 @@ public class Main {
 
 		Map<String, List<String>> attributes = new HashMap<String, List<String>>();
 
-		for (Iterator<?> it = new ArrayIterator(govtAttributes); it.hasNext();) {
-			@SuppressWarnings("unused")
-			String name = (String) it.next();
-			String value = cmd.getOptionValue(name);
+		/*
+		 * for (Iterator<?> it = new ArrayIterator(govtAttributes);
+		 * it.hasNext();) {
+		 * 
+		 * @SuppressWarnings("unused") String name = (String) it.next(); String
+		 * value = cmd.getOptionValue(name); if (value != null){
+		 * attributes.put(DOMAIN, Arrays.asList(value)); }else{
+		 * 
+		 * } }
+		 */
+
+		for (Map.Entry<String, String> entry : govtAttributesWithDefaults
+				.entrySet()) {
+			String name = entry.getKey();
+			String value = entry.getValue();
 			if (value != null)
-				attributes.put(DOMAIN, Arrays.asList(value));
+				attributes.put(name, Arrays.asList(value));
 		}
 
 		/*
@@ -173,5 +195,6 @@ public class Main {
 		 */
 
 		return attributes;
+
 	}
 }
