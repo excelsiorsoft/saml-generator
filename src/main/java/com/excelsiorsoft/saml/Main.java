@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
@@ -19,7 +20,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		try {
-			HashMap<String, List<String>> attributes = new HashMap<String, List<String>>();
+			
 			String issuer = null;
 			String subject = null;
 			String privateKey = null;
@@ -59,24 +60,13 @@ public class Main {
 					.valueOf(cmd.getOptionValue("samlAssertionExpirationDays"))
 					: null;
 
-			if (cmd.getOptionValue("domain") != null)
-				attributes.put("domain",
-						Arrays.asList(cmd.getOptionValue("domain")));
-
-			if (cmd.getOptionValue("roles") != null)
-				attributes.put("roles",
-						Arrays.asList(cmd.getOptionValue("roles").split(",")));
-
-			if (cmd.getOptionValue("email") != null)
-				attributes.put("email",
-						Arrays.asList(cmd.getOptionValue("email")));
 
 			SamlAssertionProducer producer = new SamlAssertionProducer();
 			producer.setPrivateKeyLocation(privateKey);
 			producer.setPublicKeyLocation(publicKey);
 
 			Response responseInitial = producer.createSAMLResponse(subject,
-					new DateTime(), "password", attributes, issuer,
+					new DateTime(), "password", buildAttributes(cmd), issuer,
 					samlAssertionExpirationDays);
 
 			ResponseMarshaller marshaller = new ResponseMarshaller();
@@ -91,5 +81,28 @@ public class Main {
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
+	}
+
+	private static Map<String, List<String>> buildAttributes(
+			
+			
+			
+			 CommandLine cmd) {
+		
+		Map<String, List<String>> attributes = new HashMap<String, List<String>>();
+		
+		if (cmd.getOptionValue("domain") != null)
+			attributes.put("domain",
+					Arrays.asList(cmd.getOptionValue("domain")));
+
+		if (cmd.getOptionValue("roles") != null)
+			attributes.put("roles",
+					Arrays.asList(cmd.getOptionValue("roles").split(",")));
+
+		if (cmd.getOptionValue("email") != null)
+			attributes.put("email",
+					Arrays.asList(cmd.getOptionValue("email")));
+		
+		return attributes;
 	}
 }

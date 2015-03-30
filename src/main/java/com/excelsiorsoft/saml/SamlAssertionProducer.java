@@ -8,6 +8,8 @@ import java.util.UUID;
 
 import javax.xml.namespace.QName;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.joda.time.DateTime;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.common.SAMLVersion;
@@ -85,7 +87,8 @@ public class SamlAssertionProducer {
 				subject = createSubject(subjectId, samlAssertionDays);
 			}
 
-			if (attributes != null && attributes.size() != 0) {
+			if(!MapUtils.isEmpty(attributes)){
+			//if (attributes != null && attributes.size() != 0) {
 				attributeStatement = createAttributeStatement(attributes);
 			}
 
