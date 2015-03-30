@@ -18,6 +18,15 @@ import org.w3c.dom.Element;
 
 public class Main {
 
+	private static final String SAML_ASSERTION_EXPIRATION_DAYS = "samlAssertionExpirationDays";
+	private static final String PRIVATE_KEY = "privateKey";
+	private static final String PUBLIC_KEY = "publicKey";
+	private static final String ROLES = "roles";
+	private static final String DOMAIN = "domain";
+	public static final String ISSUER = "issuer";
+	public static final String SUBJECT = "subject";
+	public static final String EMAIL = "email";
+
 	public static void main(String[] args) {
 		try {
 
@@ -28,17 +37,14 @@ public class Main {
 			Integer samlAssertionExpirationDays = null;
 
 			Options options = new Options();
-			options.addOption("issuer", true, "Issuer for saml assertion");
-			options.addOption("subject", true, "Subject of saml assertion");
-			options.addOption("email", true,
-					"Email associated with the subject");
-			options.addOption("domain", true, "Domain attribute");
-			options.addOption("roles", true, "Comma separated list of roles");
-			options.addOption("publicKey", true,
-					"Location of public key to decrypt assertion");
-			options.addOption("privateKey", true,
-					"Location or private key use to sign assertion");
-			options.addOption("samlAssertionExpirationDays", true,
+			options.addOption(ISSUER, true, "Issuer for SAML assertion");
+			options.addOption(SUBJECT, true, "Subject of SAML assertion");
+			options.addOption(EMAIL, true, "Email associated with the subject");
+			options.addOption(DOMAIN, true, "Domain attribute");
+			options.addOption(ROLES, true, "Comma separated list of roles");
+			options.addOption(PUBLIC_KEY, true, "Location of public key to decrypt assertion");
+			options.addOption(PRIVATE_KEY, true, "Location or private key use to sign assertion");
+			options.addOption(SAML_ASSERTION_EXPIRATION_DAYS, true,
 					"How long before assertion is no longer valid. Can be negative.");
 
 			// CommandLineParser parser = new GnuParser();
@@ -50,14 +56,14 @@ public class Main {
 				System.exit(1);
 			}
 
-			issuer = cmd.getOptionValue("issuer");
-			subject = cmd.getOptionValue("subject");
-			privateKey = cmd.getOptionValue("privateKey");
-			publicKey = cmd.getOptionValue("publicKey");
+			issuer = cmd.getOptionValue(ISSUER);
+			subject = cmd.getOptionValue(SUBJECT);
+			privateKey = cmd.getOptionValue(PRIVATE_KEY);
+			publicKey = cmd.getOptionValue(PUBLIC_KEY);
 
 			samlAssertionExpirationDays = cmd
-					.getOptionValue("samlAssertionExpirationDays") != null ? Integer
-					.valueOf(cmd.getOptionValue("samlAssertionExpirationDays"))
+					.getOptionValue(SAML_ASSERTION_EXPIRATION_DAYS) != null ? Integer
+					.valueOf(cmd.getOptionValue(SAML_ASSERTION_EXPIRATION_DAYS))
 					: null;
 
 			SamlAssertionProducer producer = new SamlAssertionProducer();
@@ -65,7 +71,7 @@ public class Main {
 			producer.setPublicKeyLocation(publicKey);
 
 			Response responseInitial = producer.createSAMLResponse(subject,
-					new DateTime(), "password", buildAttributes(cmd), issuer,
+					new DateTime(), /*"password",*/ buildAttributes(cmd), issuer,
 					samlAssertionExpirationDays);
 
 			ResponseMarshaller marshaller = new ResponseMarshaller();
@@ -86,18 +92,17 @@ public class Main {
 
 		Map<String, List<String>> attributes = new HashMap<String, List<String>>();
 
-		String domain = cmd.getOptionValue("domain");
+		String domain = cmd.getOptionValue(DOMAIN);
 		if (domain != null)
-			attributes.put("domain", Arrays.asList(domain));
+			attributes.put(DOMAIN, Arrays.asList(domain));
 
-		String roles = cmd.getOptionValue("roles");
+		String roles = cmd.getOptionValue(ROLES);
 		if (roles != null)
-			attributes.put("roles",
-					Arrays.asList(roles.split(",")));
+			attributes.put(ROLES, Arrays.asList(roles.split(",")));
 
-		String email = cmd.getOptionValue("email");
+		String email = cmd.getOptionValue(EMAIL);
 		if (email != null)
-			attributes.put("email", Arrays.asList(email));
+			attributes.put(EMAIL, Arrays.asList(email));
 
 		return attributes;
 	}

@@ -65,7 +65,7 @@ public class SamlAssertionProducer {
 	private CertManager certManager = new CertManager();
 
 	public Response createSAMLResponse(final String subjectId,
-			final DateTime authenticationTime, final String credentialType,
+			final DateTime authenticationTime, /*final String credentialType,*/
 			final Map<String, List<String>> attributes, final String issuer,
 			final Integer samlAssertionDays) {
 
