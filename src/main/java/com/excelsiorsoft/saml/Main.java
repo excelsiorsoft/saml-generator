@@ -20,7 +20,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		try {
-			
+
 			String issuer = null;
 			String subject = null;
 			String privateKey = null;
@@ -60,7 +60,6 @@ public class Main {
 					.valueOf(cmd.getOptionValue("samlAssertionExpirationDays"))
 					: null;
 
-
 			SamlAssertionProducer producer = new SamlAssertionProducer();
 			producer.setPrivateKeyLocation(privateKey);
 			producer.setPublicKeyLocation(publicKey);
@@ -83,26 +82,23 @@ public class Main {
 		}
 	}
 
-	private static Map<String, List<String>> buildAttributes(
-			
-			
-			
-			 CommandLine cmd) {
-		
+	private static Map<String, List<String>> buildAttributes(CommandLine cmd) {
+
 		Map<String, List<String>> attributes = new HashMap<String, List<String>>();
-		
-		if (cmd.getOptionValue("domain") != null)
-			attributes.put("domain",
-					Arrays.asList(cmd.getOptionValue("domain")));
 
-		if (cmd.getOptionValue("roles") != null)
+		String domain = cmd.getOptionValue("domain");
+		if (domain != null)
+			attributes.put("domain", Arrays.asList(domain));
+
+		String roles = cmd.getOptionValue("roles");
+		if (roles != null)
 			attributes.put("roles",
-					Arrays.asList(cmd.getOptionValue("roles").split(",")));
+					Arrays.asList(roles.split(",")));
 
-		if (cmd.getOptionValue("email") != null)
-			attributes.put("email",
-					Arrays.asList(cmd.getOptionValue("email")));
-		
+		String email = cmd.getOptionValue("email");
+		if (email != null)
+			attributes.put("email", Arrays.asList(email));
+
 		return attributes;
 	}
 }
