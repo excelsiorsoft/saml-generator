@@ -166,7 +166,7 @@ public class SamlAssertionProducer {
 		return issuer;
 	}
 
-	private Subject createSubject(final String subjectId,
+	private Subject createSubject2(final String subjectId,
 			final Integer samlAssertionDays) {
 		DateTime currentDate = new DateTime();
 		if (samlAssertionDays != null)
@@ -179,26 +179,56 @@ public class SamlAssertionProducer {
 		//nameId.setFormat("urn:oasis:names:tc:SAML:2.0:nameid-format:persistent");
 		nameId.setFormat("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
 
-		SubjectConfirmationDataBuilder dataBuilder = new SubjectConfirmationDataBuilder();
-		SubjectConfirmationData subjectConfirmationData = dataBuilder
-				.buildObject();
+		//SubjectConfirmationDataBuilder dataBuilder = new SubjectConfirmationDataBuilder();
+		SubjectConfirmationData subjectConfirmationData = new SubjectConfirmationDataBuilder().buildObject();
 		subjectConfirmationData.setNotOnOrAfter(currentDate);
 
-		SubjectConfirmationBuilder subjectConfirmationBuilder = new SubjectConfirmationBuilder();
-		SubjectConfirmation subjectConfirmation = subjectConfirmationBuilder
-				.buildObject();
+		//SubjectConfirmationBuilder subjectConfirmationBuilder = new SubjectConfirmationBuilder();
+		SubjectConfirmation subjectConfirmation = new SubjectConfirmationBuilder().buildObject();
 		//subjectConfirmation.setMethod("urn:oasis:names:tc:SAML:2.0:cm:bearer");
 		subjectConfirmation.setMethod("urn:oasis:names:tc:SAML:2.0:cm:sender-vouches");
-		subjectConfirmation.setSubjectConfirmationData(subjectConfirmationData);
+		//subjectConfirmation.setSubjectConfirmationData(subjectConfirmationData);
+		NameID subjConfNameId = new NameIDBuilder().buildObject();
+		subjConfNameId.setValue("CN=soapuiks_1, OU=FEPS, O=CGI-Federal, L=Herndon, ST=VA, C=US");
+		subjectConfirmation.setNameID(subjConfNameId);
 
 		// create subject element
-		SubjectBuilder subjectBuilder = new SubjectBuilder();
-		Subject subject = subjectBuilder.buildObject();
+		//SubjectBuilder subjectBuilder = new SubjectBuilder();
+		Subject subject = new SubjectBuilder().buildObject();
 		subject.setNameID(nameId);
 		subject.getSubjectConfirmations().add(subjectConfirmation);
 
 		return subject;
 	}
+	
+	private Subject createSubject(final String subjectId,
+			final Integer samlAssertionDays) {
+		DateTime currentDate = new DateTime();
+		if (samlAssertionDays != null)
+			currentDate = currentDate.plusDays(samlAssertionDays);
+
+		// create name element
+		NameID nameId = new NameIDBuilder().buildObject();
+		nameId.setValue(subjectId);
+		nameId.setFormat("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
+
+		SubjectConfirmationData subjectConfirmationData = new SubjectConfirmationDataBuilder().buildObject();
+		subjectConfirmationData.setNotOnOrAfter(currentDate);
+
+
+		SubjectConfirmation subjectConfirmation = new SubjectConfirmationBuilder().buildObject();
+		subjectConfirmation.setMethod("urn:oasis:names:tc:SAML:2.0:cm:sender-vouches");
+		NameID subjConfNameId = new NameIDBuilder().buildObject();
+		subjConfNameId.setValue("CN=soapuiks_1, OU=FEPS, O=CGI-Federal, L=Herndon, ST=VA, C=US");
+		subjectConfirmation.setNameID(subjConfNameId);
+
+		// create subject element
+		Subject subject = new SubjectBuilder().buildObject();
+		subject.setNameID(nameId);
+		subject.getSubjectConfirmations().add(subjectConfirmation);
+
+		return subject;
+	}	
 
 	private AuthnStatement createAuthnStatement(final DateTime issueDate) {
 		
