@@ -53,6 +53,8 @@ import org.opensaml.xml.signature.impl.SignatureBuilder;
 import org.opensaml.xml.util.XMLHelper;
 import org.w3c.dom.Element;
 
+import static com.excelsiorsoft.saml.Utils.create;
+
 public class SamlAssertionProducer {
 
 	private String privateKeyLocation;
@@ -132,8 +134,11 @@ public class SamlAssertionProducer {
 
 	private Response createResponse(final DateTime issueDate, Issuer issuer,
 			Status status, Assertion assertion) {
-		ResponseBuilder responseBuilder = new ResponseBuilder();
-		Response response = responseBuilder.buildObject();
+		
+		/*ResponseBuilder responseBuilder = new ResponseBuilder();
+		Response response = responseBuilder.buildObject();*/
+		
+		Response response = create(Response.class,Response.DEFAULT_ELEMENT_NAME);
 		response.setID(UUID.randomUUID().toString());
 		response.setIssueInstant(issueDate);
 		response.setVersion(SAMLVersion.VERSION_20);
@@ -143,13 +148,13 @@ public class SamlAssertionProducer {
 		return response;
 	}
 
-    @SuppressWarnings ("unchecked")
+/*    @SuppressWarnings ("unchecked")
     public <T> T create (Class<T> cls, QName qname)
     {
         return (T) ((XMLObjectBuilder) 
             Configuration.getBuilderFactory ().getBuilder (qname))
                 .buildObject (qname);
-    }
+    }*/
     
     private Conditions createConditions(){
     	
@@ -168,21 +173,15 @@ public class SamlAssertionProducer {
 	private Assertion createAssertion(final DateTime issueDate,
 			Subject subject, Issuer issuer, AuthnStatement authnStatement,
 			AttributeStatement attributeStatement) {
-		AssertionBuilder assertionBuilder = new AssertionBuilder();
-		Assertion assertion = assertionBuilder.buildObject();
+		/*AssertionBuilder assertionBuilder = new AssertionBuilder();
+		Assertion assertion = assertionBuilder.buildObject();*/
+		
+		Assertion assertion = create(Assertion.class,Assertion.DEFAULT_ELEMENT_NAME);		
 		assertion.setID(UUID.randomUUID().toString());
 		assertion.setIssueInstant(issueDate);
 		assertion.setSubject(subject);
 		assertion.setIssuer(issuer);
-		
-		 /*DateTime now = new DateTime ();
-	        assertion.setIssueInstant (now);
-		
-        Conditions conditions = create 
-                (Conditions.class, Conditions.DEFAULT_ELEMENT_NAME);
-            conditions.setNotBefore (now.minusSeconds (10));
-            conditions.setNotOnOrAfter (now.plusMinutes (30));*/
-            assertion.setConditions (createConditions());
+        assertion.setConditions (createConditions());
 
 		if (authnStatement != null)
 			assertion.getAuthnStatements().add(authnStatement);
@@ -195,14 +194,15 @@ public class SamlAssertionProducer {
 
 	private Issuer createIssuer(final String issuerName, final boolean needFormat) {
 		// create Issuer object
-		IssuerBuilder issuerBuilder = new IssuerBuilder();
-		Issuer issuer = issuerBuilder.buildObject();
+/*		IssuerBuilder issuerBuilder = new IssuerBuilder();
+		Issuer issuer = issuerBuilder.buildObject();*/
+		Issuer issuer = create(Issuer.class,Issuer.DEFAULT_ELEMENT_NAME);
 		issuer.setValue(issuerName);
 		if (needFormat) issuer.setFormat("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
 		return issuer;
 	}
 
-	private Subject createSubject2(final String subjectId,
+/*	private Subject createSubject2(final String subjectId,
 			final Integer samlAssertionDays) {
 		DateTime currentDate = new DateTime();
 		if (samlAssertionDays != null)
@@ -210,32 +210,39 @@ public class SamlAssertionProducer {
 
 		// create name element
 		//NameIDBuilder nameIdBuilder = new NameIDBuilder();
-		NameID nameId = new NameIDBuilder().buildObject();
+		
+		//NameID nameId = new NameIDBuilder().buildObject();
+		NameID nameId = create(NameID.class, NameID.DEFAULT_ELEMENT_NAME);
 		nameId.setValue(subjectId);
 		//nameId.setFormat("urn:oasis:names:tc:SAML:2.0:nameid-format:persistent");
 		nameId.setFormat("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
 
 		//SubjectConfirmationDataBuilder dataBuilder = new SubjectConfirmationDataBuilder();
-		SubjectConfirmationData subjectConfirmationData = new SubjectConfirmationDataBuilder().buildObject();
+		//SubjectConfirmationData subjectConfirmationData = new SubjectConfirmationDataBuilder().buildObject();
+		SubjectConfirmationData subjectConfirmationData = create(SubjectConfirmationData.class,SubjectConfirmationData.DEFAULT_ELEMENT_NAME);
 		subjectConfirmationData.setNotOnOrAfter(currentDate);
 
 		//SubjectConfirmationBuilder subjectConfirmationBuilder = new SubjectConfirmationBuilder();
-		SubjectConfirmation subjectConfirmation = new SubjectConfirmationBuilder().buildObject();
+		//SubjectConfirmation subjectConfirmation = new SubjectConfirmationBuilder().buildObject();
+		SubjectConfirmation subjectConfirmation = create (SubjectConfirmation.class, SubjectConfirmation.DEFAULT_ELEMENT_NAME);
 		//subjectConfirmation.setMethod("urn:oasis:names:tc:SAML:2.0:cm:bearer");
 		subjectConfirmation.setMethod("urn:oasis:names:tc:SAML:2.0:cm:sender-vouches");
 		//subjectConfirmation.setSubjectConfirmationData(subjectConfirmationData);
-		NameID subjConfNameId = new NameIDBuilder().buildObject();
+		//NameID subjConfNameId = new NameIDBuilder().buildObject();
+		NameID subjConfNameId = create(NameID.class, NameID.DEFAULT_ELEMENT_NAME);
 		subjConfNameId.setValue("CN=soapuiks_1, OU=FEPS, O=CGI-Federal, L=Herndon, ST=VA, C=US");
 		subjectConfirmation.setNameID(subjConfNameId);
 
 		// create subject element
 		//SubjectBuilder subjectBuilder = new SubjectBuilder();
-		Subject subject = new SubjectBuilder().buildObject();
+		//Subject subject = new SubjectBuilder().buildObject();
+		
+		Subject subject = create(Subject.class, Subject.DEFAULT_ELEMENT_NAME);
 		subject.setNameID(nameId);
 		subject.getSubjectConfirmations().add(subjectConfirmation);
 
 		return subject;
-	}
+	}*/
 	
 	private Subject createSubject(final String subjectId,
 			final Integer samlAssertionDays) {
@@ -244,22 +251,27 @@ public class SamlAssertionProducer {
 			currentDate = currentDate.plusDays(samlAssertionDays);
 
 		// create name element
-		NameID nameId = new NameIDBuilder().buildObject();
+		//NameID nameId = new NameIDBuilder().buildObject();
+		NameID nameId = create(NameID.class, NameID.DEFAULT_ELEMENT_NAME);
 		nameId.setValue(subjectId);
 		nameId.setFormat("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
 
-		SubjectConfirmationData subjectConfirmationData = new SubjectConfirmationDataBuilder().buildObject();
+		//SubjectConfirmationData subjectConfirmationData = new SubjectConfirmationDataBuilder().buildObject();
+		SubjectConfirmationData subjectConfirmationData = create(SubjectConfirmationData.class,SubjectConfirmationData.DEFAULT_ELEMENT_NAME);
 		subjectConfirmationData.setNotOnOrAfter(currentDate);
 
 
-		SubjectConfirmation subjectConfirmation = new SubjectConfirmationBuilder().buildObject();
+		//SubjectConfirmation subjectConfirmation = new SubjectConfirmationBuilder().buildObject();
+		SubjectConfirmation subjectConfirmation = create(SubjectConfirmation.class, SubjectConfirmation.DEFAULT_ELEMENT_NAME);
 		subjectConfirmation.setMethod("urn:oasis:names:tc:SAML:2.0:cm:sender-vouches");
-		NameID subjConfNameId = new NameIDBuilder().buildObject();
+		//NameID subjConfNameId = new NameIDBuilder().buildObject();
+		NameID subjConfNameId = create(NameID.class, NameID.DEFAULT_ELEMENT_NAME);
 		subjConfNameId.setValue("CN=soapuiks_1, OU=FEPS, O=CGI-Federal, L=Herndon, ST=VA, C=US");
 		subjectConfirmation.setNameID(subjConfNameId);
 
 		// create subject element
-		Subject subject = new SubjectBuilder().buildObject();
+		//Subject subject = new SubjectBuilder().buildObject();
+		Subject subject = create(Subject.class, Subject.DEFAULT_ELEMENT_NAME);
 		subject.setNameID(nameId);
 		subject.getSubjectConfirmations().add(subjectConfirmation);
 
@@ -270,7 +282,8 @@ public class SamlAssertionProducer {
 		
 		// create authcontextclassref object
 		//AuthnContextClassRefBuilder classRefBuilder = new AuthnContextClassRefBuilder();
-		AuthnContextClassRef classRef = new AuthnContextClassRefBuilder().buildObject();
+		//AuthnContextClassRef classRef = new AuthnContextClassRefBuilder().buildObject();
+		AuthnContextClassRef classRef = create(AuthnContextClassRef.class, AuthnContextClassRef.DEFAULT_ELEMENT_NAME);
 		classRef.setAuthnContextClassRef("urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport");
 
 		// create authcontext object
@@ -280,7 +293,8 @@ public class SamlAssertionProducer {
 
 		// create authenticationstatement object
 		//AuthnStatementBuilder authStatementBuilder = new AuthnStatementBuilder();
-		AuthnStatement authnStatement = new AuthnStatementBuilder().buildObject();
+		//AuthnStatement authnStatement = new AuthnStatementBuilder().buildObject();
+		AuthnStatement authnStatement = create (AuthnStatement.class,AuthnStatement.DEFAULT_ELEMENT_NAME);
 		authnStatement.setAuthnInstant(issueDate);
 		authnStatement.setAuthnContext(authnContext);
 
@@ -292,7 +306,8 @@ public class SamlAssertionProducer {
 		
 		// create authenticationstatement object
 		//AttributeStatementBuilder attributeStatementBuilder = new AttributeStatementBuilder();
-		AttributeStatement attributeStatement = new AttributeStatementBuilder().buildObject();
+		AttributeStatement attributeStatement = create(AttributeStatement.class, AttributeStatement.DEFAULT_ELEMENT_NAME);
+		//AttributeStatement attributeStatement = new AttributeStatementBuilder().buildObject();
 
 		AttributeBuilder attributeBuilder = new AttributeBuilder();
 		if (attributes != null) {
@@ -319,11 +334,13 @@ public class SamlAssertionProducer {
 	private Status createStatus() {
 		
 		//StatusCodeBuilder statusCodeBuilder = new StatusCodeBuilder();
-		StatusCode statusCode = new StatusCodeBuilder().buildObject();
+		//StatusCode statusCode = new StatusCodeBuilder().buildObject();
+		StatusCode statusCode = create(StatusCode.class,StatusCode.DEFAULT_ELEMENT_NAME);
 		statusCode.setValue(StatusCode.SUCCESS_URI);
 
-		StatusBuilder statusBuilder = new StatusBuilder();
-		Status status = statusBuilder.buildObject();
+		//StatusBuilder statusBuilder = new StatusBuilder();
+		//Status status = statusBuilder.buildObject();
+		Status status = create (Status.class,Status.DEFAULT_ELEMENT_NAME);
 		status.setStatusCode(statusCode);
 
 		return status;
@@ -334,7 +351,8 @@ public class SamlAssertionProducer {
 		if (publicKeyLocation != null && privateKeyLocation != null) {
 			
 			//SignatureBuilder builder = new SignatureBuilder();
-			Signature signature = new SignatureBuilder().buildObject();
+			//Signature signature = new SignatureBuilder().buildObject();
+			Signature signature = create(Signature.class,Signature.DEFAULT_ELEMENT_NAME);
 			signature.setSigningCredential(certManager.getSigningCredential(
 					publicKeyLocation, privateKeyLocation));
 			signature
