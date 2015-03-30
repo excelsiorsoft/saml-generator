@@ -29,7 +29,7 @@
 								<argument>-roles='role1'</argument>
 								<argument>-samlAssertionExpirationDays=5</argument>
 								<argument>-subject=samlUser1</argument>
-								
+
 							</arguments>
 						</configuration>
 					</execution>
@@ -113,6 +113,12 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.0</version>
 		</dependency>
 
 		<!-- JUnit -->

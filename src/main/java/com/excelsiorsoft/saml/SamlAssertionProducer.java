@@ -63,7 +63,7 @@ public class SamlAssertionProducer {
 
 	public Response createSAMLResponse(final String subjectId,
 			final DateTime authenticationTime, final String credentialType,
-			final HashMap<String, List<String>> attributes, String issuer,
+			final Map<String, List<String>> attributes, String issuer,
 			Integer samlAssertionDays) {
 
 		try {
@@ -195,47 +195,7 @@ public class SamlAssertionProducer {
 		return issuer;
 	}
 
-/*	private Subject createSubject2(final String subjectId,
-			final Integer samlAssertionDays) {
-		DateTime currentDate = new DateTime();
-		if (samlAssertionDays != null)
-			currentDate = currentDate.plusDays(samlAssertionDays);
 
-		// create name element
-		//NameIDBuilder nameIdBuilder = new NameIDBuilder();
-		
-		//NameID nameId = new NameIDBuilder().buildObject();
-		NameID nameId = create(NameID.class, NameID.DEFAULT_ELEMENT_NAME);
-		nameId.setValue(subjectId);
-		//nameId.setFormat("urn:oasis:names:tc:SAML:2.0:nameid-format:persistent");
-		nameId.setFormat("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
-
-		//SubjectConfirmationDataBuilder dataBuilder = new SubjectConfirmationDataBuilder();
-		//SubjectConfirmationData subjectConfirmationData = new SubjectConfirmationDataBuilder().buildObject();
-		SubjectConfirmationData subjectConfirmationData = create(SubjectConfirmationData.class,SubjectConfirmationData.DEFAULT_ELEMENT_NAME);
-		subjectConfirmationData.setNotOnOrAfter(currentDate);
-
-		//SubjectConfirmationBuilder subjectConfirmationBuilder = new SubjectConfirmationBuilder();
-		//SubjectConfirmation subjectConfirmation = new SubjectConfirmationBuilder().buildObject();
-		SubjectConfirmation subjectConfirmation = create (SubjectConfirmation.class, SubjectConfirmation.DEFAULT_ELEMENT_NAME);
-		//subjectConfirmation.setMethod("urn:oasis:names:tc:SAML:2.0:cm:bearer");
-		subjectConfirmation.setMethod("urn:oasis:names:tc:SAML:2.0:cm:sender-vouches");
-		//subjectConfirmation.setSubjectConfirmationData(subjectConfirmationData);
-		//NameID subjConfNameId = new NameIDBuilder().buildObject();
-		NameID subjConfNameId = create(NameID.class, NameID.DEFAULT_ELEMENT_NAME);
-		subjConfNameId.setValue("CN=soapuiks_1, OU=FEPS, O=CGI-Federal, L=Herndon, ST=VA, C=US");
-		subjectConfirmation.setNameID(subjConfNameId);
-
-		// create subject element
-		//SubjectBuilder subjectBuilder = new SubjectBuilder();
-		//Subject subject = new SubjectBuilder().buildObject();
-		
-		Subject subject = create(Subject.class, Subject.DEFAULT_ELEMENT_NAME);
-		subject.setNameID(nameId);
-		subject.getSubjectConfirmations().add(subjectConfirmation);
-
-		return subject;
-	}*/
 	
 	private Subject createSubject(final String subjectId,
 			final Integer samlAssertionDays) {
@@ -295,7 +255,7 @@ public class SamlAssertionProducer {
 	}
 
 	private AttributeStatement createAttributeStatement(
-			HashMap<String, List<String>> attributes) {
+			Map<String, List<String>> attributes) {
 		
 		// create authenticationstatement object
 		//AttributeStatementBuilder attributeStatementBuilder = new AttributeStatementBuilder();
