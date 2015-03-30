@@ -8,6 +8,37 @@
 
 	<build>
 		<plugins>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.4.0</version>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>com.excelsiorsoft.saml.Main</mainClass>
+							<arguments>
+								<argument>-domain=7719</argument>
+								<argument>-issuer='htt://zipari.com'</argument>
+								<argument>-privateKey=c:\\temp\\saml.pkcs8</argument>
+								<argument>-publicKey=c:\\temp\\saml.crt</argument>
+								<argument>-roles='role1'</argument>
+								<argument>-samlAssertionExpirationDays=5</argument>
+								<argument>-subject=samlUser1</argument>
+								
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+
+
+
 			<!-- Configure jar plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -101,11 +132,8 @@
 		</dependency>
 
 		<!-- Jaxb -->
-		<!-- <dependency>
-			<groupId>javax.xml</groupId>
-			<artifactId>jaxb-api</artifactId>
-			<version>2.1</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>javax.xml</groupId> <artifactId>jaxb-api</artifactId> 
+			<version>2.1</version> </dependency> -->
 
 		<!-- Open SAML -->
 		<dependency>
