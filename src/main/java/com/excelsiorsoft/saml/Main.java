@@ -64,7 +64,33 @@ public class Main {
 	public static Map<String, String> govtAttributesWithDefaults = new HashMap<String, String>() {
 
 		{
+			put(ISSUER, "");
 			put(TRANSACTION_ID, "2f3f2d3d-00cf-47ed-bb05-fd158e4b4180");
+			put(STATE_EXCHANGE_CODE, "MD0");
+			put(PARTNER_ASSIGNED_CONSUMER_ID, "1234");
+			put(FFE_ASSIGNED_CONSUMER_ID, "6ad66f44-d7f3-4ec1-b832-bb769749ff1c");
+			put(USER_TYPE, "Consumer");
+			put(FFE_USER_ID, "john.doe@email.com");
+			put(TRANSFER_TYPE, "Direct Enrollment");
+			put(RETURN_URL, "https://www.bcbs.com/partnersite");
+			put(KEEP_ALIVE_URL, "https://www.bcbs.com/extendsession.jsp");
+			put(NPN, "");
+			put(PLAN_RESULTS_FILTER, "10270,10224");
+			put(FIRST_NAME, "JOHN");
+			put(MIDDLE_NAME, "FISCHER");
+			put(LAST_NAME, "DOE");
+			put(SUFFIX_NAME, "");
+			put(STREET_NAME_1, "1234 Fishy Ln");
+			put(STREET_NAME_2, "SUITE 124");
+			put(CITY_NAME, "Peoria");
+			put(STATE, "IL");
+			put(ZIP_CODE, "20190");
+			put(SSN,"123-45-6789");
+			put(DATE_OF_BIRTH,"01/01/1951");
+			put(EMAIL,"john.doe@email.com");
+			put(PHONE_NUMBER,"531-321-2001");
+			
+			
 
 		}
 
@@ -180,7 +206,7 @@ public class Main {
 			String name = entry.getKey();
 			String value = entry.getValue();
 			if (value != null)
-				attributes.put(name, Arrays.asList(value));
+				attributes.put(name, Arrays.asList(value.split(",")));
 		}
 
 		/*
