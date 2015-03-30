@@ -29,6 +29,7 @@ import org.opensaml.saml2.core.StatusCode;
 import org.opensaml.saml2.core.Subject;
 import org.opensaml.saml2.core.SubjectConfirmation;
 import org.opensaml.saml2.core.SubjectConfirmationData;
+import org.opensaml.saml2.core.SubjectLocality;
 import org.opensaml.saml2.core.impl.AssertionBuilder;
 import org.opensaml.saml2.core.impl.AttributeBuilder;
 import org.opensaml.saml2.core.impl.AttributeStatementBuilder;
@@ -94,6 +95,10 @@ public class SamlAssertionProducer {
 			}
 
 			AuthnStatement authnStatement = createAuthnStatement(authenticationTime);
+			
+		       SubjectLocality subjectLocality = create(SubjectLocality.class, SubjectLocality.DEFAULT_ELEMENT_NAME);
+		        subjectLocality.setAddress("192.168.126.1");
+		        authnStatement.setSubjectLocality(subjectLocality);
 
 			Assertion assertion = createAssertion(new DateTime(), subject,
 					assertionIssuer, authnStatement, attributeStatement);

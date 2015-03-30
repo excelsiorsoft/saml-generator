@@ -53,12 +53,12 @@ public class Main {
 	public static final String DATE_OF_BIRTH = "DateOfBirth";
 	public static final String PHONE_NUMBER = "PhoneNumber";
 
-	public static final String[] govtAttributes = { TRANSACTION_ID,
+	/*public static final String[] govtAttributes = { TRANSACTION_ID,
 			STATE_EXCHANGE_CODE, PARTNER_ASSIGNED_CONSUMER_ID,
 			FFE_ASSIGNED_CONSUMER_ID, USER_TYPE, FFE_USER_ID, TRANSFER_TYPE,
 			RETURN_URL, KEEP_ALIVE_URL, NPN, PLAN_RESULTS_FILTER, FIRST_NAME,
 			MIDDLE_NAME, LAST_NAME, SUFFIX_NAME, STREET_NAME_1, STREET_NAME_2,
-			CITY_NAME, STATE, ZIP_CODE, SSN, DATE_OF_BIRTH, EMAIL, PHONE_NUMBER };
+			CITY_NAME, STATE, ZIP_CODE, SSN, DATE_OF_BIRTH, EMAIL, PHONE_NUMBER };*/
 
 	@SuppressWarnings("serial")
 	public static Map<String, String> govtAttributesWithDefaults = new HashMap<String, String>() {
