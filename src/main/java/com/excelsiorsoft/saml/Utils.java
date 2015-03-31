@@ -56,6 +56,7 @@ public final class Utils {
     public static void main(String [] args) throws Throwable{
     	for(Iterator<String> it = getHostAddresses().iterator(); it.hasNext();){
     		System.out.println(it.next());
+    		
     	}
     	
     }

@@ -1,11 +1,28 @@
 package com.excelsiorsoft.saml;
 
 import java.io.ByteArrayOutputStream;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.Provider;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.xml.crypto.dsig.CanonicalizationMethod;
+import javax.xml.crypto.dsig.DigestMethod;
+import javax.xml.crypto.dsig.Reference;
+import javax.xml.crypto.dsig.SignatureMethod;
+import javax.xml.crypto.dsig.SignedInfo;
+import javax.xml.crypto.dsig.Transform;
+import javax.xml.crypto.dsig.XMLSignatureFactory;
+//import javax.xml.crypto.dsig.keyinfo.KeyInfo;
+import javax.xml.crypto.dsig.keyinfo.KeyInfoFactory;
+import javax.xml.crypto.dsig.keyinfo.KeyValue;
+//import javax.xml.crypto.dsig.keyinfo.X509Data;
+import javax.xml.crypto.dsig.spec.C14NMethodParameterSpec;
+import javax.xml.crypto.dsig.spec.TransformParameterSpec;
 import javax.xml.namespace.QName;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -50,14 +67,21 @@ import org.opensaml.xml.XMLObjectBuilder;
 import org.opensaml.xml.schema.XSAny;
 import org.opensaml.xml.schema.XSString;
 import org.opensaml.xml.schema.impl.XSStringBuilder;
+import org.opensaml.xml.signature.KeyInfo;
+//import org.opensaml.xml.signature.KeyInfo;
+//import org.opensaml.xml.signature.KeyValue;
 import org.opensaml.xml.signature.Signature;
 import org.opensaml.xml.signature.SignatureConstants;
 import org.opensaml.xml.signature.Signer;
+import org.opensaml.xml.signature.X509Data;
 import org.opensaml.xml.signature.impl.SignatureBuilder;
 import org.opensaml.xml.util.XMLHelper;
 import org.w3c.dom.Element;
 
 import static com.excelsiorsoft.saml.Utils.create;
+import static java.util.Collections.singletonList;
+import static javax.xml.crypto.dsig.CanonicalizationMethod.EXCLUSIVE;
+import static javax.xml.crypto.dsig.Transform.ENVELOPED;
 
 public class SamlAssertionProducer {
 
@@ -352,9 +376,47 @@ public class SamlAssertionProducer {
 			signature
 					.setCanonicalizationAlgorithm(SignatureConstants.ALGO_ID_C14N_EXCL_OMIT_COMMENTS);
 
+			KeyInfo keyInfo = createKeyInfo();
+			signature.setKeyInfo(keyInfo);
 			return signature;
 		}
 
 		return null;
+	}
+	
+	
+	private KeyInfo createKeyInfo() throws Throwable {
+		
+/*		String providerName = System.getProperty("jsr105Provider", "org.jcp.xml.dsig.internal.dom.XMLDSigRI");
+
+        XMLSignatureFactory fac = XMLSignatureFactory.getInstance("DOM", (Provider) Class.forName(providerName).newInstance());
+
+        DigestMethod digestMethod = fac.newDigestMethod(DigestMethod.SHA256, null);
+        Transform transform = fac.newTransform(ENVELOPED, (TransformParameterSpec) null);
+        Reference reference = fac.newReference("", digestMethod, singletonList(transform), null, null);
+        SignatureMethod signatureMethod = fac.newSignatureMethod("http://www.w3.org/2001/04/xmldsig-more#rsa-sha256", null);
+        CanonicalizationMethod canonicalizationMethod = fac.newCanonicalizationMethod(EXCLUSIVE, (C14NMethodParameterSpec) null);
+
+        // Create the SignedInfo
+        SignedInfo si = fac.newSignedInfo(canonicalizationMethod, signatureMethod, singletonList(reference));
+
+
+        KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
+        kpg.initialize(2048);
+
+        KeyPair kp = kpg.generateKeyPair();
+
+        KeyInfoFactory kif = fac.getKeyInfoFactory();
+        KeyValue kv = kif.newKeyValue(kp.getPublic());
+
+        // Create a KeyInfo and add the KeyValue to it
+        KeyInfo ki = kif.newKeyInfo(Collections.singletonList(kv));
+		
+		return ki;*/
+		
+		KeyInfo keyInfo = create(KeyInfo.class,KeyInfo.DEFAULT_ELEMENT_NAME);
+		X509Data x509data = create(X509Data.class, X509Data.DEFAULT_ELEMENT_NAME);
+		keyInfo.getX509Datas().add(x509data);
+		return keyInfo;
 	}
 }
