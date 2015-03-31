@@ -97,7 +97,7 @@ public class SamlAssertionProducer {
 			AuthnStatement authnStatement = createAuthnStatement(authenticationTime);
 			
 		       SubjectLocality subjectLocality = create(SubjectLocality.class, SubjectLocality.DEFAULT_ELEMENT_NAME);
-		        subjectLocality.setAddress("192.168.126.1");
+		        subjectLocality.setAddress(Utils.getHostAddresses().get(0)/*"192.168.126.1"*/);
 		        authnStatement.setSubjectLocality(subjectLocality);
 
 			Assertion assertion = createAssertion(new DateTime(), subject,
@@ -264,7 +264,8 @@ public class SamlAssertionProducer {
 		// AuthnContextClassRefBuilder().buildObject();
 		AuthnContextClassRef classRef = create(AuthnContextClassRef.class,
 				AuthnContextClassRef.DEFAULT_ELEMENT_NAME);
-		classRef.setAuthnContextClassRef("urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport");
+		//classRef.setAuthnContextClassRef("urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport");
+		classRef.setAuthnContextClassRef("urn:oasis:names:tc:SAML:2.0:ac:classes:Password");
 
 		// create authcontext object
 		// AuthnContextBuilder authContextBuilder = new AuthnContextBuilder();
