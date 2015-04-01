@@ -83,6 +83,7 @@ import static com.excelsiorsoft.saml.Utils.create;
 import static java.util.Collections.singletonList;
 import static javax.xml.crypto.dsig.CanonicalizationMethod.EXCLUSIVE;
 import static javax.xml.crypto.dsig.Transform.ENVELOPED;
+import static com.excelsiorsoft.saml.Utils.obtainX509Certificate;
 
 public class SamlAssertionProducer {
 
@@ -420,9 +421,11 @@ public class SamlAssertionProducer {
 				X509Data.DEFAULT_ELEMENT_NAME);
 		X509Certificate x509certificate = create(X509Certificate.class,
 				X509Certificate.DEFAULT_ELEMENT_NAME);
-		x509certificate.setValue("foo-value");
+		x509certificate.setValue(obtainX509Certificate(this.publicKeyLocation));
 		x509data.getX509Certificates().add(x509certificate);
 		keyInfo.getX509Datas().add(x509data);
 		return keyInfo;
 	}
+	
+
 }

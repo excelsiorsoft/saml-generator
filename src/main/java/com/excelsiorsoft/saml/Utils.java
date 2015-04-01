@@ -3,9 +3,14 @@
  */
 package com.excelsiorsoft.saml;
 
+import java.io.FileInputStream;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.security.PublicKey;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -15,6 +20,7 @@ import javax.xml.namespace.QName;
 
 import org.opensaml.xml.Configuration;
 import org.opensaml.xml.XMLObjectBuilder;
+import org.opensaml.xml.util.Base64;
 
 /**
  * @author sleyzerzon
@@ -52,6 +58,22 @@ public final class Utils {
     	
     	return result;
     }
+    
+    
+	public final static String obtainX509Certificate(String publicKeyLocation) throws Throwable{
+		
+		String result = "foo-value";
+		
+		FileInputStream fin = new FileInputStream(publicKeyLocation);
+		CertificateFactory f = CertificateFactory.getInstance("X.509");
+		X509Certificate certificate = (X509Certificate)f.generateCertificate(fin);
+		
+		result = (Base64.encodeBytes(certificate.getEncoded()));
+		PublicKey pk = certificate.getPublicKey();
+		
+		
+		return result;
+	}
     
     public static void main(String [] args) throws Throwable{
     	for(Iterator<String> it = getHostAddresses().iterator(); it.hasNext();){
