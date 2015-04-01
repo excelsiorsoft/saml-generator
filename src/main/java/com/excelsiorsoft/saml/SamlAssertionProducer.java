@@ -73,6 +73,7 @@ import org.opensaml.xml.signature.KeyInfo;
 import org.opensaml.xml.signature.Signature;
 import org.opensaml.xml.signature.SignatureConstants;
 import org.opensaml.xml.signature.Signer;
+import org.opensaml.xml.signature.X509Certificate;
 import org.opensaml.xml.signature.X509Data;
 import org.opensaml.xml.signature.impl.SignatureBuilder;
 import org.opensaml.xml.util.XMLHelper;
@@ -414,8 +415,13 @@ public class SamlAssertionProducer {
 		
 		return ki;*/
 		
-		KeyInfo keyInfo = create(KeyInfo.class,KeyInfo.DEFAULT_ELEMENT_NAME);
-		X509Data x509data = create(X509Data.class, X509Data.DEFAULT_ELEMENT_NAME);
+		KeyInfo keyInfo = create(KeyInfo.class, KeyInfo.DEFAULT_ELEMENT_NAME);
+		X509Data x509data = create(X509Data.class,
+				X509Data.DEFAULT_ELEMENT_NAME);
+		X509Certificate x509certificate = create(X509Certificate.class,
+				X509Certificate.DEFAULT_ELEMENT_NAME);
+		x509certificate.setValue("foo-value");
+		x509data.getX509Certificates().add(x509certificate);
 		keyInfo.getX509Datas().add(x509data);
 		return keyInfo;
 	}
