@@ -93,33 +93,33 @@ public class SamlAssertionProducer {
 	private String publicKeyLocation;
 	private CertManager certManager = new CertManager();
 
-	public Response createSAMLResponse(final String subjectId,
+	public Response createSAMLResponse(/*final String subjectId,*/
 			final DateTime authenticationTime, /*final String credentialType,*/
-			final Map<String, List<String>> attributes, /*final String issuer,*/
+			final Map<String, List<String>> context, /*final String issuer,*/
 			final Integer samlAssertionDays) {
 
 		try {
 			DefaultBootstrap.bootstrap();
 
-			Signature signature = createSignature(attributes);
+			Signature signature = createSignature(context);
 			Status status = createStatus();
 			Issuer responseIssuer = null;
 			Issuer assertionIssuer = null;
 			Subject subject = null;
 			AttributeStatement attributeStatement = null;
 
-			if (attributes.get(ISSUER) != null) {
-				responseIssuer = createIssuer(attributes.get(ISSUER).get(0), false);
-				assertionIssuer = createIssuer(attributes.get(ISSUER).get(0), true);
+			if (context.get(ISSUER) != null) {
+				responseIssuer = createIssuer(context.get(ISSUER).get(0), false);
+				assertionIssuer = createIssuer(context.get(ISSUER).get(0), true);
 			}
 
-			if (subjectId != null) {
-				subject = createSubject(attributes, subjectId, samlAssertionDays);
+			if (context.get(SUBJECT_NAME).get(0) != null) {
+				subject = createSubject(context, /*subjectId,*/ samlAssertionDays);
 			}
 
-			if (!MapUtils.isEmpty(attributes)) {
+			if (!MapUtils.isEmpty(context)) {
 				// if (attributes != null && attributes.size() != 0) {
-				attributeStatement = createAttributeStatement(attributes);
+				attributeStatement = createAttributeStatement(context);
 			}
 
 			AuthnStatement authnStatement = createAuthnStatement(authenticationTime);
@@ -128,7 +128,7 @@ public class SamlAssertionProducer {
 		        subjectLocality.setAddress(Utils.getHostAddresses().get(0)/*"192.168.126.1"*/);
 		        authnStatement.setSubjectLocality(subjectLocality);
 
-			Assertion assertion = createAssertion(attributes, new DateTime(), subject,
+			Assertion assertion = createAssertion(context, new DateTime(), subject,
 					assertionIssuer, authnStatement, attributeStatement);
 			assertion.setSignature(signature);
 			
@@ -249,7 +249,7 @@ public class SamlAssertionProducer {
 		return issuer;
 	}
 
-	private Subject createSubject(final Map<String, List<String>> context, final String subjectId,
+	private Subject createSubject(final Map<String, List<String>> context, /*final String subjectId,*/
 			final Integer samlAssertionDays) {
 		DateTime currentDate = new DateTime();
 		if (samlAssertionDays != null)
@@ -258,7 +258,7 @@ public class SamlAssertionProducer {
 		// create name element
 		// NameID nameId = new NameIDBuilder().buildObject();
 		NameID nameId = create(NameID.class, NameID.DEFAULT_ELEMENT_NAME);
-		nameId.setValue(subjectId);
+		nameId.setValue(context.get(SUBJECT_NAME).get(0));
 		nameId.setFormat("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
 
 		// SubjectConfirmationData subjectConfirmationData = new
@@ -279,7 +279,7 @@ public class SamlAssertionProducer {
 		NameID subjConfNameId = create(NameID.class,
 				NameID.DEFAULT_ELEMENT_NAME);
 		
-		String fullContent = context.get(SUBJECT_NAME).toString();
+		String fullContent = context.get(SUBJECT_CONFIRMATION_NAME).toString();
 
 		subjConfNameId
 				.setValue(fullContent.substring(1,fullContent.length()-1)/*"CN=soapuiks_1, OU=FEPS, O=CGI-Federal, L=Herndon, ST=VA, C=US"*/);
@@ -440,7 +440,7 @@ public class SamlAssertionProducer {
 		
 		X509SubjectName x509SubjectName = create(X509SubjectName.class,
 				X509SubjectName.DEFAULT_ELEMENT_NAME);
-		String fullContent = context.get(SUBJECT_NAME).toString();
+		String fullContent = context.get(SUBJECT_CONFIRMATION_NAME).toString();
 		x509SubjectName
 				.setValue(fullContent.substring(1,fullContent.length()-1))/*"CN=soapuiks_1, OU=FEPS, O=CGI-Federal, L=Herndon, ST=VA, C=US"*/;
 		x509data.getX509SubjectNames().add(x509SubjectName);

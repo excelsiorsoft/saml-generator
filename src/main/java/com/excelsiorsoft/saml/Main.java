@@ -26,7 +26,7 @@ public class Main {
 	private static final String ROLES = "roles";
 	private static final String DOMAIN = "domain";
 	public static final String ISSUER = "issuer";
-	public static final String SUBJECT = "subject";
+	public static final String SUBJECT_NAME = "subject";
 	public static final String EMAIL = "email";
 
 	public static final String TRANSACTION_ID = "TransactionID";
@@ -53,7 +53,7 @@ public class Main {
 	public static final String DATE_OF_BIRTH = "DateOfBirth";
 	public static final String PHONE_NUMBER = "PhoneNumber";
 	public static final String PARTNER_ENTITY_ID = "partnerEntityId";
-	public static final String SUBJECT_NAME = "subjectName";
+	public static final String SUBJECT_CONFIRMATION_NAME = "subjectConfirmationName";
 
 	/*public static final String[] govtAttributes = { TRANSACTION_ID,
 			STATE_EXCHANGE_CODE, PARTNER_ASSIGNED_CONSUMER_ID,
@@ -92,7 +92,8 @@ public class Main {
 			put(EMAIL,"john.doe@email.com");
 			put(PHONE_NUMBER,"531-321-2001");
 			put(PARTNER_ENTITY_ID,"SamlAssertion-"+"25171a8736ed098dde8659e5ba250b5f");
-			put(SUBJECT_NAME, "CN=ffx-ffe-w7-15.cgifederal.com,OU=ffx,OU=ffe,O=cgifederal,L=Herndon,ST=VA,C=US");
+			put(SUBJECT_NAME, "test");
+			put(SUBJECT_CONFIRMATION_NAME, "CN=ffx-ffe-w7-15.cgifederal.com,OU=ffx,OU=ffe,O=cgifederal,L=Herndon,ST=VA,C=US");
 			
 
 		}
@@ -100,20 +101,20 @@ public class Main {
 		;
 	};
 	
-	public static final List<String> exludedAttributes =  Arrays.asList(PARTNER_ENTITY_ID, SUBJECT_NAME);
+	public static final List<String> exludedAttributes =  Arrays.asList(PARTNER_ENTITY_ID, SUBJECT_CONFIRMATION_NAME, SUBJECT_NAME);
 
 	public static void main(String[] args) {
 		try {
 
 			//String issuer = null;
-			String subject = null;
+			//String subject = null;
 			String privateKey = null;
 			String publicKey = null;
 			Integer samlAssertionExpirationDays = null;
 
 			Options options = new Options();
 			options.addOption(ISSUER, true, "Issuer for SAML assertion");
-			options.addOption(SUBJECT, true, "Subject of SAML assertion");
+			options.addOption(SUBJECT_NAME, true, "Subject of SAML assertion");
 			options.addOption(EMAIL, true, "Email associated with the subject");
 			options.addOption(DOMAIN, true, "Domain attribute");
 			options.addOption(ROLES, true, "Comma separated list of roles");
@@ -160,7 +161,7 @@ public class Main {
 			}
 
 			//issuer = cmd.getOptionValue(ISSUER);
-			subject = cmd.getOptionValue(SUBJECT);
+			//subject = cmd.getOptionValue(SUBJECT_NAME);
 			privateKey = cmd.getOptionValue(PRIVATE_KEY);
 			publicKey = cmd.getOptionValue(PUBLIC_KEY);
 
@@ -173,7 +174,7 @@ public class Main {
 			producer.setPrivateKeyLocation(privateKey);
 			producer.setPublicKeyLocation(publicKey);
 
-			Response responseInitial = producer.createSAMLResponse(subject,
+			Response responseInitial = producer.createSAMLResponse(/*subject,*/
 					new DateTime(), /* "password", */buildAttributes(cmd),
 					/*issuer,*/ samlAssertionExpirationDays);
 
