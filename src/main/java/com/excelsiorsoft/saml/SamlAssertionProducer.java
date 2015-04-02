@@ -129,18 +129,24 @@ public class SamlAssertionProducer {
 
 			Assertion assertion = createAssertion(attributes, new DateTime(), subject,
 					assertionIssuer, authnStatement, attributeStatement);
-
+			assertion.setSignature(signature);
+			
 			Response response = createResponse(new DateTime(), responseIssuer,
 					status, assertion);
-			response.setSignature(signature);
+			//response.setSignature(signature);
+			
 
 			ResponseMarshaller marshaller = new ResponseMarshaller();
 			Element element = marshaller.marshall(response);
 
-			if (response.getSignature() != null) {
+			if (assertion.getSignature() != null) {
 				Signer.signObject(signature);
 			}
-
+			
+/*			if (response.getSignature() != null) {
+				Signer.signObject(signature);
+			}
+*/
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			XMLHelper.writeNode(element, baos);
 
