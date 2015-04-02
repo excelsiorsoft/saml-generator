@@ -5,12 +5,14 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.security.spec.PKCS8EncodedKeySpec;
 
 import org.opensaml.xml.security.credential.Credential;
 import org.opensaml.xml.security.x509.BasicX509Credential;
+import org.opensaml.xml.util.Base64;
 
 public class CertManager {
 
@@ -54,5 +56,29 @@ public class CertManager {
 		credential.setPrivateKey(privateKey);
 
 		return credential;
+	}
+
+	public X509Certificate getX509Certificate(String publicKeyLocation)
+			throws Throwable {
+
+		X509Certificate certificate = null;
+		InputStream inStream = null;
+		try {
+			inStream = new FileInputStream(publicKeyLocation);
+
+			CertificateFactory cf = CertificateFactory.getInstance("X.509");
+			certificate = (X509Certificate) cf
+					.generateCertificate(inStream);
+		} finally {
+			inStream.close();
+		}
+		
+		return certificate;
+	}
+	
+	public String getEncodedX509Certificate(String publicKeyLocation) throws Throwable{
+		
+		return (Base64.encodeBytes(this.getX509Certificate(publicKeyLocation).getEncoded()));
+		
 	}
 }

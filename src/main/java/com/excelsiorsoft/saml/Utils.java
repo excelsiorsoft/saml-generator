@@ -60,7 +60,8 @@ public final class Utils {
     }
     
     
-	public final static String obtainX509Certificate(String publicKeyLocation) throws Throwable{
+	/*
+	   public final static String obtainEncodedX509Certificate(String publicKeyLocation) throws Throwable{
 		
 		String result = "foo-value";
 		
@@ -69,11 +70,11 @@ public final class Utils {
 		X509Certificate certificate = (X509Certificate)f.generateCertificate(fin);
 		
 		result = (Base64.encodeBytes(certificate.getEncoded()));
-		PublicKey pk = certificate.getPublicKey();
+		//PublicKey pk = certificate.getPublicKey();
 		
 		
 		return result;
-	}
+	}*/
     
     public static void main(String [] args) throws Throwable{
     	for(Iterator<String> it = getHostAddresses().iterator(); it.hasNext();){
