@@ -95,9 +95,11 @@ public class SamlAssertionProducer {
 
 	public Response createSAMLResponse(/*final String subjectId,*/
 			final DateTime authenticationTime, /*final String credentialType,*/
-			final Map<String, List<String>> context, /*final String issuer,*/
-			final Integer samlAssertionDays) {
+			final Map<String, List<String>> context /*,final String issuer,*/
+			/*final Integer samlAssertionDays*/) {
 
+		
+		
 		try {
 			DefaultBootstrap.bootstrap();
 
@@ -114,7 +116,7 @@ public class SamlAssertionProducer {
 			}
 
 			if (context.get(SUBJECT_NAME).get(0) != null) {
-				subject = createSubject(context, /*subjectId,*/ samlAssertionDays);
+				subject = createSubject(context/*,*/ /*subjectId,*/ /*samlAssertionDays*/);
 			}
 
 			if (!MapUtils.isEmpty(context)) {
@@ -249,9 +251,15 @@ public class SamlAssertionProducer {
 		return issuer;
 	}
 
-	private Subject createSubject(final Map<String, List<String>> context, /*final String subjectId,*/
-			final Integer samlAssertionDays) {
+	private Subject createSubject(final Map<String, List<String>> context/*,*/ /*final String subjectId,*/
+			/*final Integer samlAssertionDays*/) {
 		DateTime currentDate = new DateTime();
+		
+		
+		Integer samlAssertionDays = context.get(SAML_ASSERTION_EXPIRATION_DAYS)
+				.get(0) != null ? Integer.valueOf(context.get(
+				SAML_ASSERTION_EXPIRATION_DAYS).get(0)) : 0;
+		
 		if (samlAssertionDays != null)
 			currentDate = currentDate.plusDays(samlAssertionDays);
 

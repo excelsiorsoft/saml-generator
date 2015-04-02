@@ -20,7 +20,7 @@ import org.w3c.dom.Element;
 
 public class Main {
 
-	private static final String SAML_ASSERTION_EXPIRATION_DAYS = "samlAssertionExpirationDays";
+	public static final String SAML_ASSERTION_EXPIRATION_DAYS = "samlAssertionExpirationDays";
 	private static final String PRIVATE_KEY = "privateKey";
 	private static final String PUBLIC_KEY = "publicKey";
 	private static final String ROLES = "roles";
@@ -95,6 +95,8 @@ public class Main {
 			put(SUBJECT_NAME, "test");
 			put(SUBJECT_CONFIRMATION_NAME, "CN=ffx-ffe-w7-15.cgifederal.com,OU=ffx,OU=ffe,O=cgifederal,L=Herndon,ST=VA,C=US");
 			put(DOMAIN, "");
+			put(ROLES,"");
+			put(SAML_ASSERTION_EXPIRATION_DAYS,"5");
 			
 
 		}
@@ -102,7 +104,7 @@ public class Main {
 		;
 	};
 	
-	public static final List<String> exludedAttributes =  Arrays.asList(PARTNER_ENTITY_ID, SUBJECT_CONFIRMATION_NAME, SUBJECT_NAME, DOMAIN);
+	public static final List<String> exludedAttributes =  Arrays.asList(PARTNER_ENTITY_ID, SUBJECT_CONFIRMATION_NAME, SUBJECT_NAME, DOMAIN, ROLES, SAML_ASSERTION_EXPIRATION_DAYS);
 
 	public static void main(String[] args) {
 		try {
@@ -166,18 +168,18 @@ public class Main {
 			privateKey = cmd.getOptionValue(PRIVATE_KEY);
 			publicKey = cmd.getOptionValue(PUBLIC_KEY);
 
-			samlAssertionExpirationDays = cmd
+			/*samlAssertionExpirationDays = cmd
 					.getOptionValue(SAML_ASSERTION_EXPIRATION_DAYS) != null ? Integer
 					.valueOf(cmd.getOptionValue(SAML_ASSERTION_EXPIRATION_DAYS))
-					: null;
+					: null;*/
 
 			SamlAssertionProducer producer = new SamlAssertionProducer();
 			producer.setPrivateKeyLocation(privateKey);
 			producer.setPublicKeyLocation(publicKey);
 
 			Response responseInitial = producer.createSAMLResponse(/*subject,*/
-					new DateTime(), /* "password", */buildAttributes(cmd),
-					/*issuer,*/ samlAssertionExpirationDays);
+					new DateTime(), /* "password", */buildAttributes(cmd)/*,*/
+					/*issuer,*/ /*samlAssertionExpirationDays*/);
 
 			ResponseMarshaller marshaller = new ResponseMarshaller();
 			Element element = marshaller.marshall(responseInitial);
