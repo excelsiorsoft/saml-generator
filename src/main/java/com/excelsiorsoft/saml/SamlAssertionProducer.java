@@ -115,7 +115,7 @@ public class SamlAssertionProducer {
 				assertionIssuer = createIssuer(context.get(ISSUER).get(0), true);
 			}
 
-			if (context.get(SUBJECT_NAME).get(0) != null) {
+			if (context.get(EXCHANGE_ID).get(0) != null) {
 				subject = createSubject(context/*,*/ /*subjectId,*/ /*samlAssertionDays*/);
 			}
 
@@ -266,7 +266,7 @@ public class SamlAssertionProducer {
 		// create name element
 		// NameID nameId = new NameIDBuilder().buildObject();
 		NameID nameId = create(NameID.class, NameID.DEFAULT_ELEMENT_NAME);
-		nameId.setValue(context.get(SUBJECT_NAME).get(0));
+		nameId.setValue(context.get(EXCHANGE_ID).get(0));
 		nameId.setFormat("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
 
 		// SubjectConfirmationData subjectConfirmationData = new

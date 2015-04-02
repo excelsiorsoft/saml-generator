@@ -26,7 +26,7 @@ public class Main {
 	private static final String ROLES = "roles";
 	private static final String DOMAIN = "domain";
 	public static final String ISSUER = "issuer";
-	public static final String SUBJECT_NAME = "subject";
+	public static final String EXCHANGE_ID = "subject";
 	public static final String EMAIL = "email";
 
 	public static final String TRANSACTION_ID = "TransactionID";
@@ -92,7 +92,7 @@ public class Main {
 			put(EMAIL,"john.doe@email.com");
 			put(PHONE_NUMBER,"531-321-2001");
 			put(PARTNER_ENTITY_ID,"SamlAssertion-"+"25171a8736ed098dde8659e5ba250b5f");
-			put(SUBJECT_NAME, "test");
+			put(EXCHANGE_ID, "test");
 			put(SUBJECT_CONFIRMATION_NAME, "CN=ffx-ffe-w7-15.cgifederal.com,OU=ffx,OU=ffe,O=cgifederal,L=Herndon,ST=VA,C=US");
 			put(DOMAIN, "");
 			put(ROLES,"");
@@ -104,7 +104,7 @@ public class Main {
 		;
 	};
 	
-	public static final List<String> exludedAttributes =  Arrays.asList(PARTNER_ENTITY_ID, SUBJECT_CONFIRMATION_NAME, SUBJECT_NAME, DOMAIN, ROLES, SAML_ASSERTION_EXPIRATION_DAYS);
+	public static final List<String> exludedAttributes =  Arrays.asList(PARTNER_ENTITY_ID, SUBJECT_CONFIRMATION_NAME, EXCHANGE_ID, DOMAIN, ROLES, SAML_ASSERTION_EXPIRATION_DAYS);
 
 	public static void main(String[] args) {
 		try {
@@ -117,7 +117,7 @@ public class Main {
 
 			Options options = new Options();
 			options.addOption(ISSUER, true, "Issuer for SAML assertion");
-			options.addOption(SUBJECT_NAME, true, "Subject of SAML assertion");
+			options.addOption(EXCHANGE_ID, true, "Subject of SAML assertion");
 			options.addOption(EMAIL, true, "Email associated with the subject");
 			options.addOption(DOMAIN, true, "Domain attribute");
 			options.addOption(ROLES, true, "Comma separated list of roles");
@@ -164,7 +164,7 @@ public class Main {
 			}
 
 			//issuer = cmd.getOptionValue(ISSUER);
-			//subject = cmd.getOptionValue(SUBJECT_NAME);
+			//subject = cmd.getOptionValue(EXCHANGE_ID);
 			privateKey = cmd.getOptionValue(PRIVATE_KEY);
 			publicKey = cmd.getOptionValue(PUBLIC_KEY);
 
