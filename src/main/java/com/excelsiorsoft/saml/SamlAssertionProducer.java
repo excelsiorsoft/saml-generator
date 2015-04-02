@@ -127,7 +127,7 @@ public class SamlAssertionProducer {
 		        subjectLocality.setAddress(Utils.getHostAddresses().get(0)/*"192.168.126.1"*/);
 		        authnStatement.setSubjectLocality(subjectLocality);
 
-			Assertion assertion = createAssertion(new DateTime(), subject,
+			Assertion assertion = createAssertion(attributes, new DateTime(), subject,
 					assertionIssuer, authnStatement, attributeStatement);
 
 			Response response = createResponse(new DateTime(), responseIssuer,
@@ -181,7 +181,7 @@ public class SamlAssertionProducer {
 		response.setID(UUID.randomUUID().toString());
 		response.setIssueInstant(issueDate);
 		response.setVersion(SAMLVersion.VERSION_20);
-		response.setIssuer(issuer);
+		//response.setIssuer(issuer);
 		response.setStatus(status);
 		response.getAssertions().add(assertion);
 		return response;
@@ -202,7 +202,7 @@ public class SamlAssertionProducer {
 	}
 
 		
-	private Assertion createAssertion(final DateTime issueDate,
+	private Assertion createAssertion(final Map<String, List<String>> context, final DateTime issueDate,
 			Subject subject, Issuer issuer, AuthnStatement authnStatement,
 			AttributeStatement attributeStatement) {
 		/*
@@ -212,7 +212,8 @@ public class SamlAssertionProducer {
 
 		Assertion assertion = create(Assertion.class,
 				Assertion.DEFAULT_ELEMENT_NAME);
-		assertion.setID(UUID.randomUUID().toString());
+		//assertion.setID(UUID.randomUUID().toString());
+		assertion.setID(context.get(PARTNER_ENTITY_ID).get(0));
 		assertion.setIssueInstant(issueDate);
 		assertion.setSubject(subject);
 		assertion.setIssuer(issuer);
@@ -329,8 +330,13 @@ public class SamlAssertionProducer {
 		AttributeBuilder attributeBuilder = new AttributeBuilder();
 		if (!MapUtils.isEmpty(attributes)) {
 			for (Map.Entry<String, List<String>> entry : attributes.entrySet()) {
+				
+				String attrName = entry.getKey();
+
+				if (Main.exludedAttributes.contains(attrName)) continue;
+				
 				Attribute attribute = attributeBuilder.buildObject();
-				attribute.setName(entry.getKey());
+				attribute.setName(attrName);
 				attribute.setNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
 
 				for (String value : entry.getValue()) {
@@ -423,7 +429,8 @@ public class SamlAssertionProducer {
 				X509Data.DEFAULT_ELEMENT_NAME);
 		X509Certificate x509certificate = create(X509Certificate.class,
 				X509Certificate.DEFAULT_ELEMENT_NAME);
-		x509certificate.setValue(certManager.getEncodedX509Certificate(this.publicKeyLocation));
+		x509certificate.setValue(certManager
+				.getEncodedX509Certificate(this.publicKeyLocation));
 		x509data.getX509Certificates().add(x509certificate);
 		keyInfo.getX509Datas().add(x509data);
 		return keyInfo;
