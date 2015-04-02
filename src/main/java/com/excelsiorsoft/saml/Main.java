@@ -94,6 +94,7 @@ public class Main {
 			put(PARTNER_ENTITY_ID,"SamlAssertion-"+"25171a8736ed098dde8659e5ba250b5f");
 			put(SUBJECT_NAME, "test");
 			put(SUBJECT_CONFIRMATION_NAME, "CN=ffx-ffe-w7-15.cgifederal.com,OU=ffx,OU=ffe,O=cgifederal,L=Herndon,ST=VA,C=US");
+			put(DOMAIN, "");
 			
 
 		}
@@ -101,7 +102,7 @@ public class Main {
 		;
 	};
 	
-	public static final List<String> exludedAttributes =  Arrays.asList(PARTNER_ENTITY_ID, SUBJECT_CONFIRMATION_NAME, SUBJECT_NAME);
+	public static final List<String> exludedAttributes =  Arrays.asList(PARTNER_ENTITY_ID, SUBJECT_CONFIRMATION_NAME, SUBJECT_NAME, DOMAIN);
 
 	public static void main(String[] args) {
 		try {
