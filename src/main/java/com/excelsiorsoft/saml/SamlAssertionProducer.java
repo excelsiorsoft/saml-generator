@@ -101,7 +101,7 @@ public class SamlAssertionProducer {
 		try {
 			DefaultBootstrap.bootstrap();
 
-			Signature signature = createSignature();
+			Signature signature = createSignature(attributes);
 			Status status = createStatus();
 			Issuer responseIssuer = null;
 			Issuer assertionIssuer = null;
@@ -114,7 +114,7 @@ public class SamlAssertionProducer {
 			}
 
 			if (subjectId != null) {
-				subject = createSubject(subjectId, samlAssertionDays);
+				subject = createSubject(attributes, subjectId, samlAssertionDays);
 			}
 
 			if (!MapUtils.isEmpty(attributes)) {
@@ -249,7 +249,7 @@ public class SamlAssertionProducer {
 		return issuer;
 	}
 
-	private Subject createSubject(final String subjectId,
+	private Subject createSubject(final Map<String, List<String>> context, final String subjectId,
 			final Integer samlAssertionDays) {
 		DateTime currentDate = new DateTime();
 		if (samlAssertionDays != null)
@@ -278,8 +278,11 @@ public class SamlAssertionProducer {
 		// NameID subjConfNameId = new NameIDBuilder().buildObject();
 		NameID subjConfNameId = create(NameID.class,
 				NameID.DEFAULT_ELEMENT_NAME);
+		
+		String fullContent = context.get(SUBJECT_NAME).toString();
+
 		subjConfNameId
-				.setValue("CN=soapuiks_1, OU=FEPS, O=CGI-Federal, L=Herndon, ST=VA, C=US");
+				.setValue(fullContent.substring(1,fullContent.length()-1)/*"CN=soapuiks_1, OU=FEPS, O=CGI-Federal, L=Herndon, ST=VA, C=US"*/);
 		subjectConfirmation.setNameID(subjConfNameId);
 
 		// create subject element
@@ -378,7 +381,7 @@ public class SamlAssertionProducer {
 		return status;
 	}
 
-	private Signature createSignature() throws Throwable {
+	private Signature createSignature(Map<String, List<String>> context) throws Throwable {
 
 		if (publicKeyLocation != null && privateKeyLocation != null) {
 
@@ -393,7 +396,7 @@ public class SamlAssertionProducer {
 			signature
 					.setCanonicalizationAlgorithm(SignatureConstants.ALGO_ID_C14N_EXCL_OMIT_COMMENTS);
 
-			KeyInfo keyInfo = createKeyInfo();
+			KeyInfo keyInfo = createKeyInfo(context);
 			signature.setKeyInfo(keyInfo);
 			return signature;
 		}
@@ -402,7 +405,7 @@ public class SamlAssertionProducer {
 	}
 	
 	
-	private KeyInfo createKeyInfo() throws Throwable {
+	private KeyInfo createKeyInfo(Map<String, List<String>> context) throws Throwable {
 		
 /*		String providerName = System.getProperty("jsr105Provider", "org.jcp.xml.dsig.internal.dom.XMLDSigRI");
 
@@ -437,8 +440,9 @@ public class SamlAssertionProducer {
 		
 		X509SubjectName x509SubjectName = create(X509SubjectName.class,
 				X509SubjectName.DEFAULT_ELEMENT_NAME);
+		String fullContent = context.get(SUBJECT_NAME).toString();
 		x509SubjectName
-				.setValue("CN=soapuiks_1, OU=FEPS, O=CGI-Federal, L=Herndon, ST=VA, C=US");
+				.setValue(fullContent.substring(1,fullContent.length()-1))/*"CN=soapuiks_1, OU=FEPS, O=CGI-Federal, L=Herndon, ST=VA, C=US"*/;
 		x509data.getX509SubjectNames().add(x509SubjectName);
 		
 		X509Certificate x509certificate = create(X509Certificate.class,
