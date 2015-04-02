@@ -64,7 +64,7 @@ public class Main {
 	public static Map<String, String> govtAttributesWithDefaults = new HashMap<String, String>() {
 
 		{
-			put(ISSUER, "");
+			put(ISSUER, "ffx-ffe-w7-15.cgifederal.com");
 			put(TRANSACTION_ID, "2f3f2d3d-00cf-47ed-bb05-fd158e4b4180");
 			put(STATE_EXCHANGE_CODE, "MD0");
 			put(PARTNER_ASSIGNED_CONSUMER_ID, "1234");
@@ -154,7 +154,7 @@ public class Main {
 				System.exit(1);
 			}
 
-			issuer = cmd.getOptionValue(ISSUER);
+			//issuer = cmd.getOptionValue(ISSUER);
 			subject = cmd.getOptionValue(SUBJECT);
 			privateKey = cmd.getOptionValue(PRIVATE_KEY);
 			publicKey = cmd.getOptionValue(PUBLIC_KEY);
@@ -170,7 +170,7 @@ public class Main {
 
 			Response responseInitial = producer.createSAMLResponse(subject,
 					new DateTime(), /* "password", */buildAttributes(cmd),
-					issuer, samlAssertionExpirationDays);
+					/*issuer,*/ samlAssertionExpirationDays);
 
 			ResponseMarshaller marshaller = new ResponseMarshaller();
 			Element element = marshaller.marshall(responseInitial);

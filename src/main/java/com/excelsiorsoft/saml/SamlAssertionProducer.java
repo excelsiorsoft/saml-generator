@@ -84,6 +84,7 @@ import static java.util.Collections.singletonList;
 import static javax.xml.crypto.dsig.CanonicalizationMethod.EXCLUSIVE;
 import static javax.xml.crypto.dsig.Transform.ENVELOPED;
 //import static com.excelsiorsoft.saml.Utils.obtainEncodedX509Certificate;
+import static com.excelsiorsoft.saml.Main.*;
 
 public class SamlAssertionProducer {
 
@@ -93,7 +94,7 @@ public class SamlAssertionProducer {
 
 	public Response createSAMLResponse(final String subjectId,
 			final DateTime authenticationTime, /*final String credentialType,*/
-			final Map<String, List<String>> attributes, final String issuer,
+			final Map<String, List<String>> attributes, /*final String issuer,*/
 			final Integer samlAssertionDays) {
 
 		try {
@@ -106,9 +107,9 @@ public class SamlAssertionProducer {
 			Subject subject = null;
 			AttributeStatement attributeStatement = null;
 
-			if (issuer != null) {
-				responseIssuer = createIssuer(issuer, false);
-				assertionIssuer = createIssuer(issuer, true);
+			if (attributes.get(ISSUER) != null) {
+				responseIssuer = createIssuer(attributes.get(ISSUER).get(0), false);
+				assertionIssuer = createIssuer(attributes.get(ISSUER).get(0), true);
 			}
 
 			if (subjectId != null) {
@@ -200,6 +201,7 @@ public class SamlAssertionProducer {
 		return conditions;
 	}
 
+		
 	private Assertion createAssertion(final DateTime issueDate,
 			Subject subject, Issuer issuer, AuthnStatement authnStatement,
 			AttributeStatement attributeStatement) {
