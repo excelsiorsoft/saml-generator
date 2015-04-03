@@ -3,7 +3,6 @@ package com.excelsiorsoft.saml;
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +10,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
-import org.apache.commons.collections.iterators.ArrayIterator;
 import org.joda.time.DateTime;
 import org.opensaml.saml2.core.Response;
 import org.opensaml.saml2.core.impl.ResponseMarshaller;
@@ -101,7 +99,7 @@ public class Main {
 
 		}
 
-		;
+		
 	};
 	
 	public static final List<String> exludedAttributes =  Arrays.asList(PARTNER_ENTITY_ID, SUBJECT_CONFIRMATION_NAME, EXCHANGE_ID, DOMAIN, ROLES, SAML_ASSERTION_EXPIRATION_DAYS);
@@ -154,11 +152,9 @@ public class Main {
 			options.addOption(DATE_OF_BIRTH, true, "Date of Birth");
 			options.addOption(PHONE_NUMBER, true, "Phone Number");
 
-			// CommandLineParser parser = new GnuParser();
 			CommandLine cmd = new GnuParser().parse(options, args);
 
 			if (args.length == 0) {
-				// HelpFormatter formatter = new HelpFormatter();
 				new HelpFormatter().printHelp("saml-util-1.0", options, true);
 				System.exit(1);
 			}
@@ -177,9 +173,8 @@ public class Main {
 			producer.setPrivateKeyLocation(privateKey);
 			producer.setPublicKeyLocation(publicKey);
 
-			Response responseInitial = producer.createSAMLResponse(/*subject,*/
-					new DateTime(), /* "password", */buildAttributes(cmd)/*,*/
-					/*issuer,*/ /*samlAssertionExpirationDays*/);
+			Response responseInitial = producer.createSAMLResponse(
+					new DateTime(), buildAttributes(cmd));
 
 			ResponseMarshaller marshaller = new ResponseMarshaller();
 			Element element = marshaller.marshall(responseInitial);

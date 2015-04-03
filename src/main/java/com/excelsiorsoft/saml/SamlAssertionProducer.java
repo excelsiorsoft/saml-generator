@@ -1,32 +1,13 @@
 package com.excelsiorsoft.saml;
 
 import java.io.ByteArrayOutputStream;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.Provider;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.xml.crypto.dsig.CanonicalizationMethod;
-import javax.xml.crypto.dsig.DigestMethod;
-import javax.xml.crypto.dsig.Reference;
-import javax.xml.crypto.dsig.SignatureMethod;
-import javax.xml.crypto.dsig.SignedInfo;
-import javax.xml.crypto.dsig.Transform;
-import javax.xml.crypto.dsig.XMLSignatureFactory;
-//import javax.xml.crypto.dsig.keyinfo.KeyInfo;
-import javax.xml.crypto.dsig.keyinfo.KeyInfoFactory;
-import javax.xml.crypto.dsig.keyinfo.KeyValue;
-//import javax.xml.crypto.dsig.keyinfo.X509Data;
-import javax.xml.crypto.dsig.spec.C14NMethodParameterSpec;
-import javax.xml.crypto.dsig.spec.TransformParameterSpec;
-import javax.xml.namespace.QName;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
+import org.opensaml.saml2.core.impl.AttributeBuilder;
+import org.opensaml.saml2.core.impl.ResponseMarshaller;
+import org.opensaml.saml2.core.impl.AuthnContextBuilder;
 import org.joda.time.DateTime;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.common.SAMLVersion;
@@ -47,29 +28,9 @@ import org.opensaml.saml2.core.Subject;
 import org.opensaml.saml2.core.SubjectConfirmation;
 import org.opensaml.saml2.core.SubjectConfirmationData;
 import org.opensaml.saml2.core.SubjectLocality;
-import org.opensaml.saml2.core.impl.AssertionBuilder;
-import org.opensaml.saml2.core.impl.AttributeBuilder;
-import org.opensaml.saml2.core.impl.AttributeStatementBuilder;
-import org.opensaml.saml2.core.impl.AuthnContextBuilder;
-import org.opensaml.saml2.core.impl.AuthnContextClassRefBuilder;
-import org.opensaml.saml2.core.impl.AuthnStatementBuilder;
-import org.opensaml.saml2.core.impl.IssuerBuilder;
-import org.opensaml.saml2.core.impl.NameIDBuilder;
-import org.opensaml.saml2.core.impl.ResponseBuilder;
-import org.opensaml.saml2.core.impl.ResponseMarshaller;
-import org.opensaml.saml2.core.impl.StatusBuilder;
-import org.opensaml.saml2.core.impl.StatusCodeBuilder;
-import org.opensaml.saml2.core.impl.SubjectBuilder;
-import org.opensaml.saml2.core.impl.SubjectConfirmationBuilder;
-import org.opensaml.saml2.core.impl.SubjectConfirmationDataBuilder;
-import org.opensaml.xml.Configuration;
-import org.opensaml.xml.XMLObjectBuilder;
-import org.opensaml.xml.schema.XSAny;
 import org.opensaml.xml.schema.XSString;
 import org.opensaml.xml.schema.impl.XSStringBuilder;
 import org.opensaml.xml.signature.KeyInfo;
-//import org.opensaml.xml.signature.KeyInfo;
-//import org.opensaml.xml.signature.KeyValue;
 import org.opensaml.xml.signature.Signature;
 import org.opensaml.xml.signature.SignatureConstants;
 import org.opensaml.xml.signature.Signer;
@@ -84,7 +45,6 @@ import static com.excelsiorsoft.saml.Utils.create;
 import static java.util.Collections.singletonList;
 import static javax.xml.crypto.dsig.CanonicalizationMethod.EXCLUSIVE;
 import static javax.xml.crypto.dsig.Transform.ENVELOPED;
-//import static com.excelsiorsoft.saml.Utils.obtainEncodedX509Certificate;
 import static com.excelsiorsoft.saml.Main.*;
 import static org.apache.commons.collections.MapUtils.*;
 import static java.util.Map.*;
@@ -95,11 +55,8 @@ public class SamlAssertionProducer {
 	private String publicKeyLocation;
 	private CertManager certManager = new CertManager();
 
-	public Response createSAMLResponse(/*final String subjectId,*/
-			final DateTime authenticationTime, /*final String credentialType,*/
-			final Map<String, List<String>> context /*,final String issuer,*/
-			/*final Integer samlAssertionDays*/) {
-
+	public Response createSAMLResponse(final DateTime authenticationTime,
+			final Map<String, List<String>> context) {
 		
 		
 		try {
@@ -118,11 +75,10 @@ public class SamlAssertionProducer {
 			}
 
 			if (context.get(EXCHANGE_ID).get(0) != null) {
-				subject = createSubject(context/*,*/ /*subjectId,*/ /*samlAssertionDays*/);
+				subject = createSubject(context);
 			}
 
 			if (!isEmpty(context)) {
-				// if (attributes != null && attributes.size() != 0) {
 				attributeStatement = createAttributeStatement(context);
 			}
 
