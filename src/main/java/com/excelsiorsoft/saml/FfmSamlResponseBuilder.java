@@ -49,16 +49,24 @@ import static org.apache.commons.collections.MapUtils.*;
 import static java.util.Map.*;
 import static com.excelsiorsoft.saml.FlowType.*;
 
-public class SamlAssertionProducer {
+public class FfmSamlResponseBuilder {
 
-	private String privateKeyLocation;
-	private String publicKeyLocation;
-	private FlowType flowType;
-	private CertManager certManager = new CertManager();
+	//private String privateKeyLocation;
+	//private String publicKeyLocation;
+	private final FlowType flowType;
+	private final CertManager certManager = new CertManager();
+	private final ResponseBuilderConfigurer configurer = new ResponseBuilderConfigurer();
 
-	public Response createSAMLResponse(final DateTime authenticationTime,
-			final Map<String, List<String>> context) {
+	public FfmSamlResponseBuilder (FlowType flowType){
+		this.flowType = flowType;
+	}
+	
+	
+	/*public Response createSAMLResponse(final DateTime authenticationTime,
+			final Map<String, List<String>> context) {*/
 		
+		public String createSAMLResponse(final DateTime authenticationTime,
+				final Map<String, List<String>> context) {		
 		
 		try {
 			DefaultBootstrap.bootstrap();
@@ -119,7 +127,17 @@ public class SamlAssertionProducer {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			XMLHelper.writeNode(element, baos);
 
-			return response;
+			
+			//===
+		/*	ResponseMarshaller marshaller = new ResponseMarshaller();
+			Element element = marshaller.marshall(responseInitial);
+
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			XMLHelper.writeNode(element, baos);*/
+			return new String(baos.toByteArray());
+			
+			
+			//return response;
 
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -127,7 +145,7 @@ public class SamlAssertionProducer {
 		}
 	}
 
-	public String getPrivateKeyLocation() {
+/*	public String getPrivateKeyLocation() {
 		return privateKeyLocation;
 	}
 
@@ -142,7 +160,7 @@ public class SamlAssertionProducer {
 	public void setPublicKeyLocation(String publicKeyLocation) {
 		this.publicKeyLocation = publicKeyLocation;
 	}
-	
+
 	
 	
 	public FlowType getFlowType() {
@@ -152,7 +170,7 @@ public class SamlAssertionProducer {
 	public void setFlowType(FlowType flowType) {
 		this.flowType = flowType;
 	}
-
+*/	
 	private Response createResponse(final DateTime issueDate, /*Issuer issuer,*/
 			Status status, Assertion assertion) {
 
@@ -368,6 +386,9 @@ public class SamlAssertionProducer {
 
 	private Signature createSignature(Map<String, List<String>> context) throws Throwable {
 
+		String privateKeyLocation = configurer.deploymentSettings.get(PRIVATE_KEY);
+		String publicKeyLocation = configurer.deploymentSettings.get(PUBLIC_KEY);
+		
 		if (publicKeyLocation != null && privateKeyLocation != null) {
 
 			// SignatureBuilder builder = new SignatureBuilder();
@@ -433,7 +454,7 @@ public class SamlAssertionProducer {
 		X509Certificate x509certificate = create(X509Certificate.class,
 				X509Certificate.DEFAULT_ELEMENT_NAME);
 		x509certificate.setValue(certManager
-				.getEncodedX509Certificate(this.publicKeyLocation));
+				.getEncodedX509Certificate(configurer.deploymentSettings.get(PUBLIC_KEY)));
 		x509data.getX509Certificates().add(x509certificate);
 		
 		keyInfo.getX509Datas().add(x509data);
