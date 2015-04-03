@@ -120,15 +120,15 @@ public class Main {
 
 			Options options = new Options();
 			//options.addOption(ISSUER, true, "Issuer for SAML assertion");
-			options.addOption(EXCHANGE_ID, true, "Subject of SAML assertion");
+			/*options.addOption(EXCHANGE_ID, true, "Subject of SAML assertion");
 			options.addOption(EMAIL, true, "Email associated with the subject");
 			options.addOption(DOMAIN, true, "Domain attribute");
-			options.addOption(ROLES, true, "Comma separated list of roles");
+			options.addOption(ROLES, true, "Comma separated list of roles");*/
 			options.addOption(PUBLIC_KEY, true,
 					"Location of public key to decrypt assertion");
 			options.addOption(PRIVATE_KEY, true,
 					"Location or private key use to sign assertion");
-			options.addOption(SAML_ASSERTION_EXPIRATION_DAYS, true,
+			/*options.addOption(SAML_ASSERTION_EXPIRATION_DAYS, true,
 					"How long before assertion is no longer valid. Can be negative.");
 
 			options.addOption(TRANSACTION_ID, true, "Transaction ID.");
@@ -155,7 +155,7 @@ public class Main {
 			options.addOption(ZIP_CODE, true, "Zip Code");
 			options.addOption(SSN, true, "SSN");
 			options.addOption(DATE_OF_BIRTH, true, "Date of Birth");
-			options.addOption(PHONE_NUMBER, true, "Phone Number");
+			options.addOption(PHONE_NUMBER, true, "Phone Number");*/
 			
 			options.addOption(FLOW_TYPE, true, "Type of interaction flow.");
 
