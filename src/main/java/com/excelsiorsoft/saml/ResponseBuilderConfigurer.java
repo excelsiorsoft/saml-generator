@@ -18,7 +18,7 @@ import org.w3c.dom.Element;
 
 //import static com.excelsiorsoft.saml.FlowType.*;
 
-public class Main {
+public class ResponseBuilderConfigurer {
 
 	public static final String SAML_ASSERTION_EXPIRATION_DAYS = "samlAssertionExpirationDays";
 	private static final String PRIVATE_KEY = "privateKey";

@@ -44,7 +44,7 @@ import static com.excelsiorsoft.saml.Utils.create;
 import static java.util.Collections.singletonList;
 import static javax.xml.crypto.dsig.CanonicalizationMethod.EXCLUSIVE;
 import static javax.xml.crypto.dsig.Transform.ENVELOPED;
-import static com.excelsiorsoft.saml.Main.*;
+import static com.excelsiorsoft.saml.ResponseBuilderConfigurer.*;
 import static org.apache.commons.collections.MapUtils.*;
 import static java.util.Map.*;
 import static com.excelsiorsoft.saml.FlowType.*;
@@ -328,7 +328,7 @@ public class SamlAssertionProducer {
 				
 				String attrName = entry.getKey();
 
-				if (Main.exludedAttributes.contains(attrName)) continue;
+				if (ResponseBuilderConfigurer.exludedAttributes.contains(attrName)) continue;
 				
 				Attribute attribute = attributeBuilder.buildObject();
 				attribute.setName(attrName);
