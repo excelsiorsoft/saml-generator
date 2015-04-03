@@ -65,7 +65,7 @@ public class SamlAssertionProducer {
 
 			Signature signature = createSignature(context);
 			Status status = createStatus();
-			Issuer responseIssuer = null;
+			//Issuer responseIssuer = null;
 			Issuer assertionIssuer = null;
 			Subject subject = null;
 			AttributeStatement attributeStatement = null;
@@ -100,7 +100,7 @@ public class SamlAssertionProducer {
 					assertionIssuer, authnStatement, attributeStatement);
 			assertion.setSignature(signature);
 			
-			Response response = createResponse(new DateTime(), responseIssuer,
+			Response response = createResponse(new DateTime(),/* responseIssuer,*/
 					status, assertion);
 			//response.setSignature(signature);
 			
@@ -153,7 +153,7 @@ public class SamlAssertionProducer {
 		this.flowType = flowType;
 	}
 
-	private Response createResponse(final DateTime issueDate, Issuer issuer,
+	private Response createResponse(final DateTime issueDate, /*Issuer issuer,*/
 			Status status, Assertion assertion) {
 
 		/*
