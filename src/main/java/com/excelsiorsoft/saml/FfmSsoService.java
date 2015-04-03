@@ -4,19 +4,24 @@ import org.joda.time.DateTime;
 
 public class FfmSsoService {
 	
-	public String partnerToFFM(FlowType flowType){
+	public String partnerToFFM(String flowType){
 		
-		FfmSamlResponseBuilder producer = new FfmSamlResponseBuilder(FlowType.valueOf("PartnerToFFM"));
+		FfmSamlResponseBuilder producer = new FfmSamlResponseBuilder(FlowType.valueOf(flowType/*"PartnerToFFM"*/));
 		
-		/*String responseStr = producer.createSAMLResponse(
-				new DateTime(), buildAttributes(cmd));*/
+		String responseStr = producer.createSAMLResponse(new DateTime());
 		
 		
-		return null;
+		return responseStr;
 	}
 	
 	public String ffmToPartner(){
 		return null;
+	}
+	
+	public static void main(String[]args){
+		
+		FfmSsoService cut = new FfmSsoService();
+		System.out.println(cut.partnerToFFM("PartnerToFFM"));
 	}
 
 }

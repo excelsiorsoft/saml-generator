@@ -103,6 +103,8 @@ public class ResponseBuilderConfigurer {
 	
 	public static final List<String> exludedAttributes =  Arrays.asList(PARTNER_ID, FFE_ID, SUBJECT_CONFIRMATION_NAME, EXCHANGE_ID, DOMAIN, ROLES, SAML_ASSERTION_EXPIRATION_DAYS);
 
+	public final Map<String, List<String>> context;
+	
 	public static void main(String[] args) {
 		try {
 
@@ -141,8 +143,8 @@ public class ResponseBuilderConfigurer {
 			/*Response responseInitial = producer.createSAMLResponse(
 					new DateTime(), buildAttributes(cmd));*/
 			
-			String responseStr = producer.createSAMLResponse(
-					new DateTime(), buildAttributes(cmd));
+			/*String responseStr = producer.createSAMLResponse(
+					new DateTime());*/
 
 			/*ResponseMarshaller marshaller = new ResponseMarshaller();
 			Element element = marshaller.marshall(responseInitial);
@@ -151,14 +153,14 @@ public class ResponseBuilderConfigurer {
 			XMLHelper.writeNode(element, baos);
 			String responseStr = new String(baos.toByteArray());*/
 
-			System.out.println(responseStr);
+			//System.out.println(responseStr);
 
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
 	}
 
-	private static Map<String, List<String>> buildAttributes(CommandLine cmd) {
+	public static Map<String, List<String>> buildAttributes(/*CommandLine cmd*/) {
 
 		Map<String, List<String>> attributes = new HashMap<String, List<String>>();
 
@@ -174,5 +176,9 @@ public class ResponseBuilderConfigurer {
 
 		return attributes;
 
+	}
+	
+	public ResponseBuilderConfigurer(){
+		this.context = buildAttributes();
 	}
 }

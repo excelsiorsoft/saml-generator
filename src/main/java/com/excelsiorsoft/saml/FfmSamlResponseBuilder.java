@@ -59,14 +59,17 @@ public class FfmSamlResponseBuilder {
 
 	public FfmSamlResponseBuilder (FlowType flowType){
 		this.flowType = flowType;
+		;
 	}
 	
 	
 	/*public Response createSAMLResponse(final DateTime authenticationTime,
 			final Map<String, List<String>> context) {*/
 		
-		public String createSAMLResponse(final DateTime authenticationTime,
-				final Map<String, List<String>> context) {		
+		public String createSAMLResponse(final DateTime authenticationTime/*,
+				final Map<String, List<String>> context*/) {
+			
+			Map<String, List<String>> context = configurer.context;
 		
 		try {
 			DefaultBootstrap.bootstrap();
