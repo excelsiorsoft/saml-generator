@@ -16,6 +16,8 @@ import org.opensaml.saml2.core.impl.ResponseMarshaller;
 import org.opensaml.xml.util.XMLHelper;
 import org.w3c.dom.Element;
 
+import static com.excelsiorsoft.saml.FlowType.*;
+
 public class Main {
 
 	public static final String SAML_ASSERTION_EXPIRATION_DAYS = "samlAssertionExpirationDays";
@@ -50,7 +52,8 @@ public class Main {
 	public static final String SSN = "SSN";
 	public static final String DATE_OF_BIRTH = "DateOfBirth";
 	public static final String PHONE_NUMBER = "PhoneNumber";
-	public static final String PARTNER_ENTITY_ID = "partnerEntityId";
+	public static final String PARTNER_ID = "partnerId";
+	public static final String FFE_ID = "FFEId";
 	public static final String SUBJECT_CONFIRMATION_NAME = "subjectConfirmationName";
 
 	/*public static final String[] govtAttributes = { TRANSACTION_ID,
@@ -64,7 +67,7 @@ public class Main {
 	public static Map<String, String> govtAttributesWithDefaults = new HashMap<String, String>() {
 
 		{
-			put(ISSUER, "ffx-ffe-w7-15.cgifederal.com");
+			//put(ISSUER, "ffx-ffe-w7-15.cgifederal.com");
 			put(TRANSACTION_ID, "2f3f2d3d-00cf-47ed-bb05-fd158e4b4180");
 			put(STATE_EXCHANGE_CODE, "MD0");
 			put(PARTNER_ASSIGNED_CONSUMER_ID, "1234");
@@ -89,8 +92,9 @@ public class Main {
 			put(DATE_OF_BIRTH,"01/01/1951");
 			put(EMAIL,"john.doe@email.com");
 			put(PHONE_NUMBER,"531-321-2001");
-			put(PARTNER_ENTITY_ID,"SamlAssertion-"+"25171a8736ed098dde8659e5ba250b5f");
-			put(EXCHANGE_ID, "test");
+			put(PARTNER_ID,"ffx-ffe-w7-15.cgifederal.com");
+			put(FFE_ID,"ffx-ffe-w7-15.cgifederal.com");
+			put(EXCHANGE_ID, "test"); 
 			put(SUBJECT_CONFIRMATION_NAME, "CN=ffx-ffe-w7-15.cgifederal.com,OU=ffx,OU=ffe,O=cgifederal,L=Herndon,ST=VA,C=US");
 			put(DOMAIN, "");
 			put(ROLES,"");
@@ -102,7 +106,7 @@ public class Main {
 		
 	};
 	
-	public static final List<String> exludedAttributes =  Arrays.asList(PARTNER_ENTITY_ID, SUBJECT_CONFIRMATION_NAME, EXCHANGE_ID, DOMAIN, ROLES, SAML_ASSERTION_EXPIRATION_DAYS);
+	public static final List<String> exludedAttributes =  Arrays.asList(/*ISSUER,*/ PARTNER_ID, FFE_ID, SUBJECT_CONFIRMATION_NAME, EXCHANGE_ID, DOMAIN, ROLES, SAML_ASSERTION_EXPIRATION_DAYS);
 
 	public static void main(String[] args) {
 		try {
@@ -114,7 +118,7 @@ public class Main {
 			Integer samlAssertionExpirationDays = null;
 
 			Options options = new Options();
-			options.addOption(ISSUER, true, "Issuer for SAML assertion");
+			//options.addOption(ISSUER, true, "Issuer for SAML assertion");
 			options.addOption(EXCHANGE_ID, true, "Subject of SAML assertion");
 			options.addOption(EMAIL, true, "Email associated with the subject");
 			options.addOption(DOMAIN, true, "Domain attribute");
@@ -170,6 +174,7 @@ public class Main {
 					: null;*/
 
 			SamlAssertionProducer producer = new SamlAssertionProducer();
+			producer.setFlowType(PartnerToFFM);
 			producer.setPrivateKeyLocation(privateKey);
 			producer.setPublicKeyLocation(publicKey);
 

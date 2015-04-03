@@ -37,7 +37,6 @@ import org.opensaml.xml.signature.Signer;
 import org.opensaml.xml.signature.X509Certificate;
 import org.opensaml.xml.signature.X509Data;
 import org.opensaml.xml.signature.X509SubjectName;
-import org.opensaml.xml.signature.impl.SignatureBuilder;
 import org.opensaml.xml.util.XMLHelper;
 import org.w3c.dom.Element;
 
@@ -48,11 +47,13 @@ import static javax.xml.crypto.dsig.Transform.ENVELOPED;
 import static com.excelsiorsoft.saml.Main.*;
 import static org.apache.commons.collections.MapUtils.*;
 import static java.util.Map.*;
+import static com.excelsiorsoft.saml.FlowType.*;
 
 public class SamlAssertionProducer {
 
 	private String privateKeyLocation;
 	private String publicKeyLocation;
+	private FlowType flowType;
 	private CertManager certManager = new CertManager();
 
 	public Response createSAMLResponse(final DateTime authenticationTime,
@@ -69,11 +70,18 @@ public class SamlAssertionProducer {
 			Subject subject = null;
 			AttributeStatement attributeStatement = null;
 
-			if (context.get(ISSUER) != null) {
+			/*if (context.get(ISSUER) != null) {
 				responseIssuer = createIssuer(context.get(ISSUER).get(0), false);
-				assertionIssuer = createIssuer(context.get(ISSUER).get(0), true);
-			}
+				//assertionIssuer = createIssuer(context.get(ISSUER).get(0), true);
+			}*/
 
+			if (this.flowType != null) {
+				assertionIssuer = (flowType == PartnerToFFM) ? createIssuer(
+						context.get(PARTNER_ID).get(0), false)
+						: (flowType == FlowType.FFMtoPartner) ? createIssuer(
+								context.get(FFE_ID).get(0), false) : null;
+			}
+			
 			if (context.get(EXCHANGE_ID).get(0) != null) {
 				subject = createSubject(context);
 			}
@@ -134,6 +142,16 @@ public class SamlAssertionProducer {
 	public void setPublicKeyLocation(String publicKeyLocation) {
 		this.publicKeyLocation = publicKeyLocation;
 	}
+	
+	
+	
+	public FlowType getFlowType() {
+		return flowType;
+	}
+	
+	public void setFlowType(FlowType flowType) {
+		this.flowType = flowType;
+	}
 
 	private Response createResponse(final DateTime issueDate, Issuer issuer,
 			Status status, Assertion assertion) {
@@ -179,8 +197,8 @@ public class SamlAssertionProducer {
 
 		Assertion assertion = create(Assertion.class,
 				Assertion.DEFAULT_ELEMENT_NAME);
-		//assertion.setID(UUID.randomUUID().toString());
-		assertion.setID(context.get(PARTNER_ENTITY_ID).get(0));
+		assertion.setID(UUID.randomUUID().toString());
+		//assertion.setID(context.get(PARTNER_ID).get(0));
 		assertion.setIssueInstant(issueDate);
 		assertion.setSubject(subject);
 		assertion.setIssuer(issuer);
@@ -420,7 +438,7 @@ public class SamlAssertionProducer {
 		
 		keyInfo.getX509Datas().add(x509data);
 		return keyInfo;
-	}
 	
+	}	
 
 }
