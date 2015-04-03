@@ -86,6 +86,8 @@ import static javax.xml.crypto.dsig.CanonicalizationMethod.EXCLUSIVE;
 import static javax.xml.crypto.dsig.Transform.ENVELOPED;
 //import static com.excelsiorsoft.saml.Utils.obtainEncodedX509Certificate;
 import static com.excelsiorsoft.saml.Main.*;
+import static org.apache.commons.collections.MapUtils.*;
+import static java.util.Map.*;
 
 public class SamlAssertionProducer {
 
@@ -119,7 +121,7 @@ public class SamlAssertionProducer {
 				subject = createSubject(context/*,*/ /*subjectId,*/ /*samlAssertionDays*/);
 			}
 
-			if (!MapUtils.isEmpty(context)) {
+			if (!isEmpty(context)) {
 				// if (attributes != null && attributes.size() != 0) {
 				attributeStatement = createAttributeStatement(context);
 			}
@@ -346,8 +348,8 @@ public class SamlAssertionProducer {
 				AttributeStatement.DEFAULT_ELEMENT_NAME);
 
 		AttributeBuilder attributeBuilder = new AttributeBuilder();
-		if (!MapUtils.isEmpty(attributes)) {
-			for (Map.Entry<String, List<String>> entry : attributes.entrySet()) {
+		if (!isEmpty(attributes)) {
+			for (Entry<String, List<String>> entry : attributes.entrySet()) {
 				
 				String attrName = entry.getKey();
 
