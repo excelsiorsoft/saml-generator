@@ -55,6 +55,7 @@ public class Main {
 	public static final String PARTNER_ID = "partnerId";
 	public static final String FFE_ID = "FFEId";
 	public static final String SUBJECT_CONFIRMATION_NAME = "subjectConfirmationName";
+	public static final String FLOW_TYPE = "flowType";
 
 	/*public static final String[] govtAttributes = { TRANSACTION_ID,
 			STATE_EXCHANGE_CODE, PARTNER_ASSIGNED_CONSUMER_ID,
@@ -155,6 +156,8 @@ public class Main {
 			options.addOption(SSN, true, "SSN");
 			options.addOption(DATE_OF_BIRTH, true, "Date of Birth");
 			options.addOption(PHONE_NUMBER, true, "Phone Number");
+			
+			options.addOption(FLOW_TYPE, true, "Type of interaction flow.");
 
 			CommandLine cmd = new GnuParser().parse(options, args);
 
@@ -174,7 +177,7 @@ public class Main {
 					: null;*/
 
 			SamlAssertionProducer producer = new SamlAssertionProducer();
-			producer.setFlowType(PartnerToFFM);
+			producer.setFlowType(FlowType.valueOf(cmd.getOptionValue(FLOW_TYPE))/*PartnerToFFM*/);
 			producer.setPrivateKeyLocation(privateKey);
 			producer.setPublicKeyLocation(publicKey);
 
