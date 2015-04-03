@@ -16,7 +16,7 @@ import org.opensaml.saml2.core.impl.ResponseMarshaller;
 import org.opensaml.xml.util.XMLHelper;
 import org.w3c.dom.Element;
 
-import static com.excelsiorsoft.saml.FlowType.*;
+//import static com.excelsiorsoft.saml.FlowType.*;
 
 public class Main {
 
@@ -116,7 +116,7 @@ public class Main {
 			//String subject = null;
 			String privateKey = null;
 			String publicKey = null;
-			Integer samlAssertionExpirationDays = null;
+			//Integer samlAssertionExpirationDays = null;
 
 			Options options = new Options();
 			//options.addOption(ISSUER, true, "Issuer for SAML assertion");
