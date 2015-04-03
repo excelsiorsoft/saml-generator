@@ -349,6 +349,7 @@ public class SamlAssertionProducer {
 
 		AttributeBuilder attributeBuilder = new AttributeBuilder();
 		if (!isEmpty(attributes)) {
+
 			for (Entry<String, List<String>> entry : attributes.entrySet()) {
 				
 				String attrName = entry.getKey();
