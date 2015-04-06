@@ -14,7 +14,7 @@ public class FfmSsoService {
 		return responseStr;
 	}
 	
-	public String ffmToPartner(){
+	public String ffmToPartner(String saml){
 		return null;
 	}
 	
