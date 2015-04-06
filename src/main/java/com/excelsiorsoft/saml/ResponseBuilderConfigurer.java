@@ -179,6 +179,18 @@ public class ResponseBuilderConfigurer {
 	}
 	
 	public ResponseBuilderConfigurer(){
+		
+		//will be coming from the DB as per Chris's request
+		String privateKey = "c:\\temp\\saml.pkcs8";
+		String publicKey = "c:\\temp\\saml.crt";
+		
+		
+		/*privateKey = cmd.getOptionValue(PRIVATE_KEY);
+		publicKey = cmd.getOptionValue(PUBLIC_KEY);*/
+		
+		deploymentSettings.put(PRIVATE_KEY, privateKey);
+		deploymentSettings.put(PUBLIC_KEY, publicKey);
+		
 		this.context = buildAttributes();
 	}
 }
