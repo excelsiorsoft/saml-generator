@@ -58,7 +58,7 @@ public class CertManager {
 		return credential;
 	}
 
-	public X509Certificate getX509Certificate(String publicKeyLocation)
+	private X509Certificate getX509Certificate(String publicKeyLocation)
 			throws Throwable {
 
 		X509Certificate certificate = null;
